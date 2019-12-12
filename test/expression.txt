@@ -1,0 +1,24 @@
+# Add
+(+ 1 2)
+==>
+Program(List(Symbol,Number,Number))
+
+# Symbols
+'hello +world _what $test' what?
+==>
+Program(Symbol,Symbol,Symbol,Symbol,Symbol)
+
+# Keywords
+:hi :hi/ho ::ho
+==>
+Program(Keyword,Keyword,Keyword)
+
+# Boolean
+true false
+==>
+Program(Boolean,Boolean)
+
+# Nil
+nil
+==>
+Program(Nil)

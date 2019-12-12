@@ -1,0 +1,42 @@
+@top[name=Program] { expression* }
+
+@skip { whitespace | LineComment }
+expression { Boolean | Nil | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp }
+List { "(" expression* ")" }
+Vector { "[" expression* "]" }
+Map { "{" (expression expression)* "}" }
+Set { "#{" expression* "}" }
+
+
+@tokens {
+  whitespace { (std.whitespace | ",")+ }
+
+  LineComment { ";" ![\n]* }
+
+  identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
+
+  Symbol { identifierChar (identifierChar | std.digit | "+" | "-")* }
+  Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
+
+  Number {
+    (std.digit+ ("." std.digit*)? | "." std.digit+) (("e" | "E") (" +" | "-")? std.digit+)? |
+    "0x" (std.digit | $[a-fA-F])+ |
+    "0b" $[01]+ |
+    "0o" $[0-7]+
+  }
+
+  String {
+    '"' (![\\\n"] | "\\" _)* '"'?
+  }
+
+  RegExp { "#" '"' (![\\\n"] | "\\" _)* '"'? }
+
+  "#{" "(" ")" "[" "]" "{" "}"
+
+}
+
+
+Boolean { @specialize<Symbol, "true" | "false"> }
+Nil { @specialize<Symbol, "nil"> }
+
+@detectDelim
