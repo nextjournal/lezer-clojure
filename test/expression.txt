@@ -34,6 +34,11 @@ Program(Nil)
 ==>
 Program(LineComment, LineComment)
 
+# Ignore next form
+:hello #_ :ignored
+==>
+Program(Keyword, IgnoredExpression(Keyword))
+
 # Destructuring
 (let [{:keys [hello]} world]
   world)

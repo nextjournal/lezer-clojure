@@ -1,17 +1,18 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment }
-expression { Boolean | Nil | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp }
+expression { Boolean | Nil | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp | IgnoredExpression }
+IgnoredExpression { ignoreNext expression }
 List { "(" expression* ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
 
-
 @tokens {
   whitespace { (std.whitespace | ",")+ }
 
   LineComment { ";" ![\n]* }
+  ignoreNext { "#_" }
 
   identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
 
@@ -38,5 +39,6 @@ Set { "#{" expression* "}" }
 
 Boolean { @specialize<Symbol, "true" | "false"> }
 Nil { @specialize<Symbol, "nil"> }
+
 
 @detectDelim
