@@ -5,19 +5,25 @@
   "main": "dist/index.js",
   "author": "Martin Kavalar <mk@katercalling.com>",
   "license": "MIT",
+  "type": "module",
+  "exports": {
+    "import": "./dist/index.es.js",
+    "require": "./dist/index.cjs"
+  },
+  "module": "dist/index.es.js",
   "devDependencies": {
-    "lezer-generator": "^0.5.0",
-    "mocha": "^6.1.3",
+    "lezer-generator": "^0.8.4",
+    "mocha": "^7.1.1",
     "rollup": "^1.10.0",
     "rollup-plugin-node-resolve": "^4.2.3"
   },
   "dependencies": {
-    "lezer": "^0.5.0"
+    "lezer": "^0.8.3"
   },
   "scripts": {
     "build": "lezer-generator src/clojure.grammar -o src/parser && rollup -c",
     "build-debug": "lezer-generator src/clojure.grammar --names -o src/parser && rollup -c",
     "prepare": "npm run build",
-    "test": "mocha test/test-*.js"
+    "test": "mocha --experimental-modules test/test-*.js"
   }
 }
