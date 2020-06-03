@@ -1,7 +1,7 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment }
-expression { Boolean | Nil | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp | IgnoredExpression }
+expression { Boolean | Nil | Deref | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp | IgnoredExpression }
 IgnoredExpression { ignoreNext expression }
 List { "(" expression* ")" }
 Vector { "[" expression* "]" }
@@ -13,6 +13,7 @@ Set { "#{" expression* "}" }
 
   LineComment { ";" ![\n]* }
   ignoreNext { "#_" }
+  Deref { "@" }
 
   identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
 

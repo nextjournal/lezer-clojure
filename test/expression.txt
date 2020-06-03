@@ -39,6 +39,11 @@ Program(LineComment, LineComment)
 ==>
 Program(Keyword, IgnoredExpression(Keyword))
 
+# Deref
+@hello
+==>
+Program(Deref,Symbol)
+
 # Destructuring
 (let [{:keys [hello]} world]
   world)
