@@ -9,14 +9,14 @@ Program(List(Symbol,Number,Number))
 Program(List, Map, Vector, Set, RegExp)
 
 # Symbols
-'hello +world _what $test' what? test*
+'hello +world _what $test' what? test* test::+
 ==>
-Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
+Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
 # Keywords
-:hi :hi/ho ::ho
+:hi :hi/ho ::ho :*+!-_? :abc:def:ghi
 ==>
-Program(Keyword,Keyword,Keyword)
+Program(Keyword,Keyword,Keyword,Keyword,Keyword)
 
 # Boolean
 true false

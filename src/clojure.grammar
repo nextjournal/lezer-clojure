@@ -16,7 +16,7 @@ Set { "#{" expression* "}" }
 
   identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
 
-  Symbol { identifierChar (identifierChar | std.digit | "+" | "-")* }
+  Symbol { identifierChar (identifierChar | std.digit | ":")* }
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
   Number {
