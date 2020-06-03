@@ -3,10 +3,15 @@
 ==>
 Program(List(Symbol,Number,Number))
 
-# Symbols
-'hello +world _what $test' what?
+# Literals
+() {} [] #{} #"\d"
 ==>
-Program(Symbol,Symbol,Symbol,Symbol,Symbol)
+Program(List, Map, Vector, Set, RegExp)
+
+# Symbols
+'hello +world _what $test' what? test*
+==>
+Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
 # Keywords
 :hi :hi/ho ::ho
@@ -22,3 +27,15 @@ Program(Boolean,Boolean)
 nil
 ==>
 Program(Nil)
+
+# Line comments
+;; comment
+;; another comment
+==>
+Program(LineComment, LineComment)
+
+# Destructuring
+(let [{:keys [hello]} world]
+  world)
+==>
+Program(List(Symbol,Vector(Map(Keyword, Vector(Symbol)), Symbol) Symbol))
