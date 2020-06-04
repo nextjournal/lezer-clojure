@@ -17,15 +17,17 @@ Set { "#{" expression* "}" }
   identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
 
   Deref { "@" }
-  Symbol { identifierChar (identifierChar | std.digit | ":")* }
+  Symbol { identifierChar (identifierChar | std.digit | ":" | "." )* }
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
   Number {
-    (std.digit+ ("." std.digit*)? | "." std.digit+) (("e" | "E") (" +" | "-")? std.digit+)? |
-    "0x" (std.digit | $[a-fA-F])+ |
+    ("+" | "-")? (std.digit+ ("." std.digit*)? | "." std.digit+) (("e" | "E") ("+" | "-")? std.digit+)? |
+    ("+" | "-")? std.digit+ "N" |
+    ("+" | "-")? "0x" (std.digit | $[a-fA-F])+ |
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
+  @precedence { Number, Symbol }
 
   String {
     '"' (![\\\n"] | "\\" _)* '"'?

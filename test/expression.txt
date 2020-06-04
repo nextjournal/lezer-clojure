@@ -3,13 +3,38 @@
 ==>
 Program(List(Symbol,Number,Number))
 
+# Numbers
+42 +42 -42
+==>
+Program(Number,Number,Number)
+
+# Number N
+42N +42N -42N 0 0N
+==>
+Program(Number,Number,Number,Number,Number)
+
+# Number Leading Zero
+042 +042 -042
+==>
+Program(Number,Number,Number)
+
+# Number Exponentials
+0x42e +0x42e -0x42e
+==>
+Program(Number,Number,Number)
+
+# Number BigInt
+9223372036854775808 -9223372036854775808 10000000000000000000000000000000000000000000000000 -10000000000000000000000000000000000000000000000000
+==>
+Program(Number,Number,Number,Number)
+
 # Literals
 () {} [] #{} #"\d"
 ==>
 Program(List, Map, Vector, Set, RegExp)
 
 # Symbols
-'hello +world _what $test' what? test* test::+
+foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
 ==>
 Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
