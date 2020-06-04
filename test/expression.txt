@@ -37,7 +37,13 @@ Program(LineComment, LineComment)
 # Ignore next form
 :hello #_ :ignored
 ==>
-Program(Keyword, IgnoredExpression(Keyword))
+Program(Keyword, Ignored(IgnoreNext,Keyword))
+
+# Ignore next two forms
+#_#_ :ignored also-ignored "not-ignored"
+==>
+Program(Ignored(IgnoreNext,Ignored(IgnoreNext,Keyword), Symbol), String)
+
 
 # Deref
 @hello
