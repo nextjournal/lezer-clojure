@@ -103,6 +103,11 @@ nil
 ==>
 Program(Nil)
 
+# Characters
+\f \u0194 \o123 \newline \A \@
+==>
+Program(Character,Character,Character,Character,Character,Character)
+
 # Line comments
 ;; comment
 ;; another comment

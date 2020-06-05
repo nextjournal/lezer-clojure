@@ -1,7 +1,7 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Ignored }
-expression { Boolean | Nil | Deref | Symbol | Number | Keyword | List | Vector | Map | Set | String | RegExp }
+expression { Boolean | Nil | Deref | Symbol | Number | Keyword | List | Vector | Map | Set | String | Character | RegExp }
 Ignored { IgnoreNext expression }
 List { "(" expression* ")" }
 Vector { "[" expression* "]" }
@@ -33,6 +33,7 @@ Set { "#{" expression* "}" }
   String {
     '"' (![\\\n"] | "\\" _)* '"'?
   }
+  Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
   RegExp { "#" '"' (![\\\n"] | "\\" _)* '"'? }
 
