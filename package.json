@@ -1,9 +1,9 @@
 {
   "name": "lezer-clojure",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "lezer-based Clojure(Script) grammar",
-  "main": "dist/index.js",
-  "author": "Martin Kavalar <mk@katercalling.com>",
+  "main": "dist/index.cjs",
+  "author": "Martin Kavalar <martin@nextjournal.com>",
   "license": "MIT",
   "type": "module",
   "exports": {
