@@ -130,6 +130,18 @@ Program(Ignored(IgnoreNext,Ignored(IgnoreNext,Keyword), Symbol), String)
 ==>
 Program(Deref,Symbol)
 
+# Quote
+'bar
+==> Program(Quoted(Quote,Symbol))
+
+# SyntaxQuote
+`(1)
+==> Program(SyntaxQuoted(SyntaxQuote,List(Number)))
+
+# SyntaxQuote Unquote
+`(vector ~x)
+==> Program(SyntaxQuoted(SyntaxQuote,List("(",Symbol,Unquoted(Unquote,Symbol),")")))
+
 # Destructuring
 (let [{:keys [hello]} world]
   world)

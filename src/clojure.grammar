@@ -1,8 +1,11 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Ignored }
-expression { Boolean | Nil | Deref | Symbol | Number | Keyword | List | Vector | Map | Set | String | Character | RegExp }
+expression { Boolean | Nil | Deref | Quoted | SyntaxQuoted | Unquoted | Symbol | Number | Keyword | List | Vector | Map | Set | String | Character | RegExp }
 Ignored { IgnoreNext expression }
+Quoted { Quote expression }
+Unquoted { Unquote expression }
+SyntaxQuoted { SyntaxQuote expression }
 List { "(" expression* ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
@@ -14,10 +17,13 @@ Set { "#{" expression* "}" }
   LineComment { ";" ![\n]* }
   IgnoreNext { "#_" }
 
-  identifierChar { std.asciiLetter | $[_='/?!*+\-$\u{a1}-\u{10ff}] }
+  identifierChar { std.asciiLetter | $[_=/?!*+\-$\u{a1}-\u{10ff}] }
 
+  Quote { "'" }
+  SyntaxQuote { "`" }
+  Unquote { "~" }
   Deref { "@" }
-  Symbol { identifierChar (identifierChar | std.digit | ":" | "." )* }
+  Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
   Number {
