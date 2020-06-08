@@ -140,7 +140,16 @@ Program(Deref,Symbol)
 
 # SyntaxQuote Unquote
 `(vector ~x)
-==> Program(SyntaxQuoted(SyntaxQuote,List("(",Symbol,Unquoted(Unquote,Symbol),")")))
+==> Program(SyntaxQuoted(SyntaxQuote,List(Symbol,Unquoted(Unquote,Symbol))))
+
+# Metadata
+^{:hello :world} :my-expr ^String :more ^:dynamic :test 
+==> Program(Metadata(Meta,Map(Keyword,Keyword),Keyword),Metadata(Meta,Symbol,Keyword), Metadata(Meta,Keyword,Keyword))
+
+# Metadata Multiple
+^:dynamic ^ints obj
+==> Program(Metadata(Meta,Keyword,Metadata(Meta,Symbol,Symbol)))
+
 
 # Destructuring
 (let [{:keys [hello]} world]

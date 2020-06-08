@@ -1,10 +1,11 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Ignored }
-expression { Boolean | Nil | Deref | Quoted | SyntaxQuoted | Unquoted | Symbol | Number | Keyword | List | Vector | Map | Set | String | Character | RegExp }
+expression { Boolean | Nil | Deref | Quoted | SyntaxQuoted | Unquoted | Symbol | Number | Metadata | Keyword | List | Vector | Map | Set | String | Character | RegExp }
 Ignored { IgnoreNext expression }
 Quoted { Quote expression }
 Unquoted { Unquote expression }
+Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
 List { "(" expression* ")" }
 Vector { "[" expression* "]" }
@@ -23,6 +24,7 @@ Set { "#{" expression* "}" }
   SyntaxQuote { "`" }
   Unquote { "~" }
   Deref { "@" }
+  Meta { "^" }
   Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
