@@ -12,13 +12,13 @@
   },
   "module": "dist/index.es.js",
   "devDependencies": {
-    "lezer-generator": "^0.8.5",
+    "lezer-generator": "^0.9.0",
     "mocha": "^7.1.1",
     "rollup": "^1.10.0",
     "rollup-plugin-node-resolve": "^4.2.3"
   },
   "dependencies": {
-    "lezer": "^0.8.5"
+    "lezer": "^0.9.0"
   },
   "scripts": {
     "build": "lezer-generator src/clojure.grammar -o src/parser && rollup -c",
