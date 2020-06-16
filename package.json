@@ -11,6 +11,7 @@
     "require": "./dist/index.cjs"
   },
   "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "devDependencies": {
     "lezer-generator": "^0.9.0",
     "mocha": "^7.1.1",
