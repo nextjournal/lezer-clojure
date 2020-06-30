@@ -39,11 +39,11 @@ Set { "#{" expression* "}" }
   @precedence { Number, Symbol }
 
   String {
-    '"' (![\\\n"] | "\\" _)* '"'?
+    '"' (!["] | "\\" _)* '"'?
   }
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
-  RegExp { "#" '"' (![\\\n"] | "\\" _)* '"'? }
+  RegExp { "#" '"' (!["] | "\\" _)* '"'? }
 
   "#{" "(" ")" "[" "]" "{" "}"
 
