@@ -156,6 +156,21 @@ Program(Deref,Symbol)
 ^:dynamic ^ints obj
 ==> Program(Metadata(Meta,Keyword,Metadata(Meta,Symbol,Symbol)))
 
+# Def
+(def foo)
+==> Program(List("(",Def,Var,")"))
+
+# Def Expression
+(def foo :bar)
+==> Program(List("(",Def,Var,Keyword,")"))
+
+# Def Docstring
+(def foo "doc")
+==> Program(List("(",Def,Var,Docstring,Keyword,")"))
+
+# Def Docstring + Expression
+(def foo "doc" :bar)
+==> Program(List("(",Def,Var,Docstring,Keyword,")"))
 
 # Destructuring
 (let [{:keys [hello]} world]
