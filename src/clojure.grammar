@@ -7,10 +7,16 @@ Quoted { Quote expression }
 Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
-List { "(" (Def Var Docstring? )? expression* ")" }
+List { "(" (
+    Def Var |
+    Def Var expression |
+    Def Var DocString expression+ |
+    expression*
+  ) ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
+DocString { String }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
@@ -27,6 +33,7 @@ Set { "#{" expression* "}" }
   Meta { "^" }
   Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
   Var { Symbol }
+
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
   Number {
@@ -38,14 +45,10 @@ Set { "#{" expression* "}" }
     "0o" $[0-7]+
   }
   @precedence { Number, Symbol }
-  @precedence { String, Docstring }
-  // FIXME: with this Docstring never appears in the parse tree. Without it the grammar cannot be created with:
-  // `Overlapping tokens Docstring and String used in same context (src/clojure.grammar 1:1)`
-
+  
   String {
     '"' (!["] | "\\" _)* '"'?
   }
-  Docstring { String }
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
   RegExp { "#" '"' (!["] | "\\" _)* '"'? }
@@ -58,5 +61,6 @@ Set { "#{" expression* "}" }
 Boolean { @specialize<Symbol, "true" | "false"> }
 Nil { @specialize<Symbol, "nil"> }
 Def { @specialize<Symbol, "def"> }
+
 
 @detectDelim

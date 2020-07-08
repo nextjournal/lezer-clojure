@@ -164,13 +164,17 @@ Program(Deref,Symbol)
 (def foo :bar)
 ==> Program(List("(",Def,Var,Keyword,")"))
 
-# Def Docstring
+# Def + String
 (def foo "doc")
-==> Program(List("(",Def,Var,Docstring,Keyword,")"))
+==> Program(List("(",Def,Var,String")"))
 
-# Def Docstring + Expression
-(def foo "doc" :bar)
-==> Program(List("(",Def,Var,Docstring,Keyword,")"))
+# Def + DocString + Keyword
+(def foo "doc" :foo)
+==> Program(List("(",Def,Var,DocString(String),Keyword,")"))
+
+# Def + DocString + String + String
+(def foo "doc" "foo" "bar")
+==> Program(List("(",Def,Var,DocString(String),String,String,")"))
 
 # Destructuring
 (let [{:keys [hello]} world]
