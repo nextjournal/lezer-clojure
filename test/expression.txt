@@ -164,6 +164,10 @@ Program(Deref,Symbol)
 (def foo :bar)
 ==> Program(List("(",Def,Var,Keyword,")"))
 
+# Def Expression 2
+(def foo :bar :foo)
+==> Program(List("(",Def,Var,Keyword,Keyword,")"))
+
 # Def + String
 (def foo "doc")
 ==> Program(List("(",Def,Var,String")"))
