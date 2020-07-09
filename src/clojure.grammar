@@ -8,12 +8,14 @@ Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
 List { "(" (
-    (Def Var DocString?)? expression*
+    (Def Var DocString?)? (expression)*
   ) ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
-DocString { String }
+
+@precedence { doc @cut }
+DocString { !doc String }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
