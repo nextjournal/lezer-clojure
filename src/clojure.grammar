@@ -8,10 +8,7 @@ Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
 List { "(" (
-    Def Var |
-    Def Var expression |
-    Def Var DocString expression+ |
-    expression*
+    (Def Var DocString?)? expression*
   ) ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
