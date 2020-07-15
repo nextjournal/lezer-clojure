@@ -7,4 +7,4 @@ The code is licensed under an MIT license.
 
 # Dev
 
-To watch & test, with [entr](http://eradman.com/entrproject/) installed run `git ls-files | entr npm run on-change`
+To watch & test, with [entr](http://eradman.com/entrproject/) installed run `npm run watch`
