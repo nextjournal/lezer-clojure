@@ -7,15 +7,19 @@ Quoted { Quote expression }
 Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
-List { "(" (
-    (Def Var DocString?)? (expression)*
-  ) ")" }
+
+@precedence { listOperator @cut, specializedString @cut }
+
+listContents {
+  defList { !listOperator Def Symbol DocString? expression* } |
+  anyList { expression* }
+}
+List { "(" listContents ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
 
-@precedence { doc @cut }
-DocString { !doc String }
+DocString { !specializedString String }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
@@ -31,7 +35,6 @@ DocString { !doc String }
   Deref { "@" }
   Meta { "^" }
   Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
-  Var { Symbol }
 
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
@@ -48,6 +51,7 @@ DocString { !doc String }
   String {
     '"' (!["] | "\\" _)* '"'?
   }
+
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
   RegExp { "#" '"' (!["] | "\\" _)* '"'? }
