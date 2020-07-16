@@ -188,6 +188,11 @@ Program(Deref,Symbol)
 (defn foo "doc" [] "bar")
 ==> Program(List(Defn,Var(Symbol),DocString(String),Vector,String))
 
+# Defn + ConditionMap
+(defn foo [] {:pre []} "bar")
+==> Program(List(Defn,Var(Symbol),Vector,Map(Keyword,Vector),String))
+
+
 # Defn Variadic
 (defn greet ([] (println "hello")))
 ==> Program(List(Defn,Var(Symbol),List(Vector(),List(Symbol,String))))
