@@ -184,6 +184,11 @@ Program(Deref,Symbol)
 (defn foo [] "bar")
 ==> Program(List("(",Defn,Var(Symbol),Vector,String,")"))
 
+# Defn + DocString
+(defn foo "doc" [] "bar")
+==> Program(List("(",Defn,Var(Symbol),DocString(String),Vector,String,")"))
+
+
 # Destructuring
 (let [{:keys [hello]} world]
   world)

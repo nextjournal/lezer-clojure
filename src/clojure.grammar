@@ -12,7 +12,7 @@ SyntaxQuoted { SyntaxQuote expression }
 
 listContents {
   defList  { !listOperator Def  Var (DocString expression+ | expression+)? } |
-  defnList { !listOperator Defn Var Vector expression* } |
+  defnList { !listOperator Defn Var DocString? Vector expression* } |
   anyList { expression* }
 }
 
