@@ -7,10 +7,22 @@ Quoted { Quote expression }
 Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
-List { "(" expression* ")" }
+
+@precedence { listOperator @cut, docString @left }
+
+listContents {
+  defList  { !listOperator Def  Var (DocString expression+ | expression+)? } |
+  defnList { !listOperator Defn Var DocString? Map? (Vector expression* | List { "(" Vector expression* ")"}+) } |
+  anyList { expression* }
+}
+
+List { "(" listContents ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
+
+DocString { !docString String }
+Var { Symbol }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
@@ -26,6 +38,7 @@ Set { "#{" expression* "}" }
   Deref { "@" }
   Meta { "^" }
   Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
+
   Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
 
   Number {
@@ -37,10 +50,11 @@ Set { "#{" expression* "}" }
     "0o" $[0-7]+
   }
   @precedence { Number, Symbol }
-
+  
   String {
     '"' (!["] | "\\" _)* '"'?
   }
+
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
   RegExp { "#" '"' (!["] | "\\" _)* '"'? }
@@ -52,6 +66,8 @@ Set { "#{" expression* "}" }
 
 Boolean { @specialize<Symbol, "true" | "false"> }
 Nil { @specialize<Symbol, "nil"> }
+Def { @specialize<Symbol, "def"> }
+Defn { @specialize<Symbol, "defn"> }
 
 
 @detectDelim
