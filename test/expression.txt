@@ -170,7 +170,7 @@ Program(Deref,Symbol)
 
 # Def + String
 (def foo "doc")
-==> Program(List("(",Def,Symbol,DocString(String)")"))
+==> Program(List("(",Def,Symbol,String")"))
 
 # Def + DocString + Keyword
 (def foo "doc" :foo)
