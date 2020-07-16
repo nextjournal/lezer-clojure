@@ -8,20 +8,22 @@ Unquoted { Unquote expression }
 Metadata { Meta expression expression }
 SyntaxQuoted { SyntaxQuote expression }
 
-@precedence { listOperator @cut, specializedString @cut }
+@precedence { listOperator @cut, docString @left }
 
 listContents {
-  defList { !listOperator Def Symbol (DocumentedExpression | undocumentedExpression)? } |
+  defList { !listOperator Def Symbol (documentedExpression | undocumentedExpression)? } |
   anyList { expression* }
 }
 
-DocumentedExpression { String ~cont expression+ }
+documentedExpression { DocString ~cont expression+ }
 undocumentedExpression { expression ~cont expression* }
 
 List { "(" listContents ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
+
+DocString { !docString String }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
