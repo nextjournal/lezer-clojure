@@ -11,7 +11,7 @@ SyntaxQuoted { SyntaxQuote expression }
 @precedence { listOperator @cut, docString @left }
 
 listContents {
-  defList { !listOperator Def Symbol (documentedExpression | undocumentedExpression)? } |
+  defList { !listOperator Def Var (documentedExpression | undocumentedExpression)? } |
   anyList { expression* }
 }
 
@@ -24,6 +24,7 @@ Map { "{" (expression expression)* "}" }
 Set { "#{" expression* "}" }
 
 DocString { !docString String }
+Var { Symbol }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
