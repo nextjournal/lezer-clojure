@@ -11,12 +11,10 @@ SyntaxQuoted { SyntaxQuote expression }
 @precedence { listOperator @cut, docString @left }
 
 listContents {
-  defList { !listOperator Def Var (documentedExpression | undocumentedExpression)? } |
+  defList  { !listOperator Def  Var (DocString expression+ | expression+)? } |
+  defnList { !listOperator Defn Var Vector expression* } |
   anyList { expression* }
 }
-
-documentedExpression { DocString ~cont expression+ }
-undocumentedExpression { expression ~cont expression* }
 
 List { "(" listContents ")" }
 Vector { "[" expression* "]" }
@@ -69,6 +67,7 @@ Var { Symbol }
 Boolean { @specialize<Symbol, "true" | "false"> }
 Nil { @specialize<Symbol, "nil"> }
 Def { @specialize<Symbol, "def"> }
+Defn { @specialize<Symbol, "defn"> }
 
 
 @detectDelim
