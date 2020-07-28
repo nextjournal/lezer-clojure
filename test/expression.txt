@@ -86,7 +86,7 @@ Program(List, Map, Vector)
 # Sharps
 #{} #"\d" #:kw{}
 ==>
-Program(Set(Map), RegExp(String), NamespacedMap(Keyword,Map))
+Program(Set, RegExp, NamespacedMap(Keyword,Map))
 
 # Symbols
 foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
@@ -216,8 +216,12 @@ Program(Deref(Symbol))
 
 # Data Literal
 #uuid
-==> Program(DataLiteral(Symbol))
+==> Program(DataLiteral)
 
 # Symbolic Value
 ##Inf
-==> Program(SymbolicValue(Symbol))
+==> Program(SymbolicValue)
+
+# Anonymous Function
+#(inc x)
+==> Program(AnonymousFunction(Symbol, Symbol))

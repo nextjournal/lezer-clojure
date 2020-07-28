@@ -1,7 +1,7 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Ignored }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | Symbol | Number | WithMeta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | Symbol | Number | WithMeta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction}
 Ignored { "#_" expression }
 WithMeta { metaPrefix expression }
 
@@ -13,19 +13,22 @@ listContents {
   anyList { expression* }
 }
 
-List { "(" listContents ")" }
+list { "(" listContents ")" }
+List { list }
 Vector { "[" expression* "]" }
-Map { "{" (expression expression)* "}" }
+map { "{" (expression expression)* "}" }
+Map { map }
 
 @skip {} {
-  Set { "#" Map }
+  Set { "#" map }
+  AnonymousFunction { "#" list }
   NamespacedMap { "#" Keyword Map }
-  RegExp { "#" String }
-  metaPrefix { "^" expression}
+  RegExp { "#" string }
   Var { "#'" Symbol }
   ReaderConditional { "#?" (List | Deref) }
-  DataLiteral { "#" Symbol }
-  SymbolicValue { "##" Symbol }
+  DataLiteral { "#" ident }
+  SymbolicValue { "##" simpleIdent }
+  metaPrefix { "^" expression}
 }
 
 DocString { !docString String }
@@ -59,9 +62,11 @@ VarName { Symbol }
   }
   @precedence { Number, Symbol }
 
-  String {
+  string {
     '"' (!["] | "\\" _)* '"'?
   }
+
+  String { string }
 
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
