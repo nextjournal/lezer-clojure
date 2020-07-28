@@ -79,9 +79,14 @@ Program(Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Nu
 Program(Number,Number,Number)
 
 # Literals
-() {} [] #{} #"\d"
+() {} []
 ==>
-Program(List, Map, Vector, Set, RegExp)
+Program(List, Map, Vector)
+
+# Sharps
+#{} #"\d" #:kw{}
+==>
+Program(Set(Map), RegExp(String), NamespacedMap(Keyword,Map))
 
 # Symbols
 foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
@@ -89,9 +94,9 @@ foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
 Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
 # Keywords
-:hi :hi/ho ::ho :*+!-_? :abc:def:ghi
+:hi :hi/ho ::ho ::hi/ho :*+!-_? :abc:def:ghi
 ==>
-Program(Keyword,Keyword,Keyword,Keyword,Keyword)
+Program(Keyword,Keyword,Keyword,Keyword,Keyword,Keyword)
 
 # Boolean
 true false
@@ -123,80 +128,96 @@ Program(LineComment, LineComment)
 # Ignore next form
 :hello #_ :ignored
 ==>
-Program(Keyword, Ignored(IgnoreNext,Keyword))
+Program(Keyword, Ignored(Keyword))
 
 # Ignore next two forms
 #_#_ :ignored also-ignored "not-ignored"
 ==>
-Program(Ignored(IgnoreNext,Ignored(IgnoreNext,Keyword), Symbol), String)
+Program(Ignored(Ignored(Keyword), Symbol), String)
 
 
 # Deref
 @hello
 ==>
-Program(Deref,Symbol)
+Program(Deref(Symbol))
 
 # Quote
 'bar
-==> Program(Quoted(Quote,Symbol))
+==> Program(Quote(Symbol))
 
 # SyntaxQuote
 `(1)
-==> Program(SyntaxQuoted(SyntaxQuote,List(Number)))
+==> Program(SyntaxQuote(List(Number)))
 
 # SyntaxQuote Unquote
 `(vector ~x)
-==> Program(SyntaxQuoted(SyntaxQuote,List(Symbol,Unquoted(Unquote,Symbol))))
+==> Program(SyntaxQuote(List(Symbol,Unquote(Symbol))))
 
-# Metadata
-^{:hello :world} :my-expr ^String :more ^:dynamic :test 
-==> Program(Metadata(Meta,Map(Keyword,Keyword),Keyword),Metadata(Meta,Symbol,Keyword), Metadata(Meta,Keyword,Keyword))
+# WithMeta
+^{:hello :world} :my-expr ^String :more ^:dynamic :test
+==> Program(WithMeta(Map(Keyword,Keyword),Keyword),WithMeta(Symbol,Keyword), WithMeta(Keyword,Keyword))
 
-# Metadata Multiple
+# WithMeta Multiple
 ^:dynamic ^ints obj
-==> Program(Metadata(Meta,Keyword,Metadata(Meta,Symbol,Symbol)))
+==> Program(WithMeta(Keyword,WithMeta(Symbol,Symbol)))
 
 # Def
 (def foo)
-==> Program(List("(",Def,Var(Symbol),")"))
+==> Program(List(Def,VarName(Symbol)))
 
 # Def Expression
 (def foo :bar)
-==> Program(List("(",Def,Var(Symbol),Keyword,")"))
+==> Program(List(Def,VarName(Symbol),Keyword))
 
 # Def Expression 2
 (def foo :bar :foo)
-==> Program(List("(",Def,Var(Symbol),Keyword,Keyword,")"))
+==> Program(List(Def,VarName(Symbol),Keyword,Keyword))
 
 # Def + String
 (def foo "doc")
-==> Program(List("(",Def,Var(Symbol),String")"))
+==> Program(List(Def,VarName(Symbol),String))
 
 # Def + DocString + Keyword
 (def foo "doc" :foo)
-==> Program(List("(",Def,Var(Symbol),DocString(String),Keyword,")"))
+==> Program(List(Def,VarName(Symbol),DocString(String),Keyword))
 
 # Def + DocString + String + String
 (def foo "doc" "foo" "bar")
-==> Program(List("(",Def,Var(Symbol),DocString(String),String,String,")"))
+==> Program(List(Def,VarName(Symbol),DocString(String),String,String))
 
 # Defn
 (defn foo [] "bar")
-==> Program(List("(",Defn,Var(Symbol),Vector,String,")"))
+==> Program(List(Defn,VarName(Symbol),Vector,String))
 
 # Defn + DocString
 (defn foo "doc" [] "bar")
-==> Program(List(Defn,Var(Symbol),DocString(String),Vector,String))
+==> Program(List(Defn,VarName(Symbol),DocString(String),Vector,String))
 
 # Defn + ConditionMap
 (defn foo [] {:pre []} "bar")
-==> Program(List(Defn,Var(Symbol),Vector,Map(Keyword,Vector),String))
+==> Program(List(Defn,VarName(Symbol),Vector,Map(Keyword,Vector),String))
 
 
 # Defn Variadic
 (defn greet ([] (println "hello")))
-==> Program(List(Defn,Var(Symbol),List(Vector(),List(Symbol,String))))
+==> Program(List(Defn,VarName(Symbol),List(Vector(),List(Symbol,String))))
 
 # Defn Variadic 2
 (defn greet "doc" ([] (greet "mary")) ([name] (println "hello" name)))
-==> Program(List(Defn,Var(Symbol),DocString(String),List(Vector,List(Symbol,String)),List(Vector(Symbol),List(Symbol,String,Symbol))))
+==> Program(List(Defn,VarName(Symbol),DocString(String),List(Vector,List(Symbol,String)),List(Vector(Symbol),List(Symbol,String,Symbol))))
+
+# Var
+#'hello
+==> Program(Var(Symbol))
+
+# Reader Conditional
+#?(:cljs "hello") #?@(:cljs ["hello"])
+==> Program(ReaderConditional(List(Keyword,String)),ReaderConditional(Deref(List(Keyword,Vector(String)))))
+
+# Data Literal
+#uuid
+==> Program(DataLiteral(Symbol))
+
+# Symbolic Value
+##Inf
+==> Program(SymbolicValue(Symbol))

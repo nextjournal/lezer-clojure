@@ -1,45 +1,53 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Ignored }
-expression { Boolean | Nil | Deref | Quoted | SyntaxQuoted | Unquoted | Symbol | Number | Metadata | Keyword | List | Vector | Map | Set | String | Character | RegExp }
-Ignored { IgnoreNext expression }
-Quoted { Quote expression }
-Unquoted { Unquote expression }
-Metadata { Meta expression expression }
-SyntaxQuoted { SyntaxQuote expression }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | Symbol | Number | WithMeta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue }
+Ignored { "#_" expression }
+WithMeta { metaPrefix expression }
 
-@precedence { listOperator @cut, docString @left }
+@precedence { listOperator @cut, docString @left, Symbol @left}
 
 listContents {
-  defList  { !listOperator Def  Var (DocString expression+ | expression+)? } |
-  defnList { !listOperator Defn Var DocString? Map? (Vector expression* | List { "(" Vector expression* ")"}+) } |
+  defList  { !listOperator Def  VarName (DocString expression+ | expression+)? } |
+  defnList { !listOperator Defn VarName DocString? Map? (Vector expression* | List { "(" Vector expression* ")"}+) } |
   anyList { expression* }
 }
 
 List { "(" listContents ")" }
 Vector { "[" expression* "]" }
 Map { "{" (expression expression)* "}" }
-Set { "#{" expression* "}" }
+
+@skip {} {
+  Set { "#" Map }
+  NamespacedMap { "#" Keyword Map }
+  RegExp { "#" String }
+  metaPrefix { "^" expression}
+  Var { "#'" Symbol }
+  ReaderConditional { "#?" (List | Deref) }
+  DataLiteral { "#" Symbol }
+  SymbolicValue { "##" Symbol }
+}
 
 DocString { !docString String }
-Var { Symbol }
+Deref { "@" expression }
+Quote { "'" expression }
+SyntaxQuote { "`" expression }
+Unquote { "~" expression }
+VarName { Symbol }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
 
   LineComment { ";" ![\n]* }
-  IgnoreNext { "#_" }
 
-  identifierChar { std.asciiLetter | $[_=/?!*+\-$\u{a1}-\u{10ff}] }
+  identStart { std.asciiLetter | $[_=?!*+\-$\u{a1}-\u{10ff}] }
+  identChar { identStart (std.digit | ":" | "." | "'")* }
+  simpleIdent { identStart identChar* }
+  qualifiedIdent { simpleIdent "/" identChar+ }
+  ident { simpleIdent | qualifiedIdent }
 
-  Quote { "'" }
-  SyntaxQuote { "`" }
-  Unquote { "~" }
-  Deref { "@" }
-  Meta { "^" }
-  Symbol { identifierChar (identifierChar | std.digit | ":" | "." | "'" )* }
-
-  Keyword { (":" Symbol | "::" Symbol | ":" Symbol "/" Symbol) }
+  Symbol { ident }
+  Keyword { ":" ":"? ident }
 
   Number {
     ("+" | "-")? (std.digit+ ("." std.digit* "M"?)? | "." std.digit+) (("e" | "E") ("+" | "-")? std.digit+ "M"?)? |
@@ -50,24 +58,18 @@ Var { Symbol }
     "0o" $[0-7]+
   }
   @precedence { Number, Symbol }
-  
+
   String {
     '"' (!["] | "\\" _)* '"'?
   }
 
   Character { "\\" (std.asciiLetter | std.digit | "@")+ }
 
-  RegExp { "#" '"' (!["] | "\\" _)* '"'? }
-
-  "#{" "(" ")" "[" "]" "{" "}"
-
 }
-
 
 Boolean { @specialize<Symbol, "true" | "false"> }
 Nil { @specialize<Symbol, "nil"> }
 Def { @specialize<Symbol, "def"> }
 Defn { @specialize<Symbol, "defn"> }
-
 
 @detectDelim
