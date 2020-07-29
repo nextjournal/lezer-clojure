@@ -1,7 +1,7 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Discard }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Meta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg}
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Meta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg }
 Discard { "#_" expression }
 
 @precedence { docString @left, operator @left}
@@ -19,10 +19,10 @@ map { "{" expression* "}" }
 Map { map }
 
 @skip {} {
-  Set { "#" Map }
   AnonymousFunction { "#" list }
   NamespacedMap { "#" Keyword Map }
-  RegExp { "#" String }
+  RegExp { "#" string }
+  Set { "#" map }
   Var { "#'" Symbol }
   ReaderConditional { "#?" (List | Deref) }
   DataLiteral { "#" ident }
