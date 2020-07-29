@@ -4,12 +4,12 @@
 expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | Symbol | Number | Meta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction}
 Ignored { "#_" expression }
 
-@precedence { listOperator @cut, docString @left, Symbol @left}
+@precedence { docString @left, operator @left}
 
 listContents {
-  defList  { !listOperator Def  VarName (DocString expression+ | expression+)? } |
-  defnList { !listOperator defnLike VarName DocString? Map? (Vector expression* | List { "(" Vector expression* ")"}+) } |
-  anyList { expression* }
+  defList  { defLike  VarName (DocString expression+ | expression+)? } |
+  defnList { defnLike VarName DocString? Map? (Vector expression* | List { "(" Vector expression* ")"}+) } |
+  anyList { Operator? expression* }
 }
 
 list { "(" listContents ")" }
@@ -36,6 +36,8 @@ Quote { "'" expression }
 SyntaxQuote { "`" expression }
 Unquote { "~" expression }
 VarName { Meta? Symbol }
+Symbol { ident }
+Operator { !operator ident }
 
 @tokens {
   whitespace { (std.whitespace | ",")+ }
@@ -48,7 +50,6 @@ VarName { Meta? Symbol }
   qualifiedIdent { simpleIdent "/" identChar+ }
   ident { simpleIdent | qualifiedIdent }
 
-  Symbol { ident }
   Keyword { ":" ":"? ident }
 
   Number {
@@ -59,7 +60,7 @@ VarName { Meta? Symbol }
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
-  @precedence { Number, Symbol }
+  @precedence { Number, ident }
 
   string {
     '"' (!["] | "\\" _)* '"'?
@@ -71,12 +72,15 @@ VarName { Meta? Symbol }
 
 }
 
-Boolean { @specialize<Symbol, "true" | "false"> }
-Nil { @specialize<Symbol, "nil"> }
-Def { @specialize<Symbol, "def"> }
-Defn { @specialize<Symbol, "defn"> }
-DefnPrivate[name=Defn] { @specialize<Symbol, "defn-"> }
+Boolean { @specialize<ident, "true" | "false"> }
+Nil { @specialize<ident, "nil"> }
 
+
+Def[name=Operator] { @specialize<ident, "def"> }
+defLike { Def }
+
+Defn[name=Operator] { @specialize<ident, "defn"> }
+DefnPrivate[name=Operator] { @specialize<ident, "defn-"> }
 defnLike { Defn | DefnPrivate }
 
 @detectDelim

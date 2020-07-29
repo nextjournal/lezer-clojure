@@ -1,7 +1,7 @@
 # Add
 (+ 1 2)
 ==>
-Program(List(Symbol,Number,Number))
+Program(List(Operator,Number,Number))
 
 # Numbers
 42 +42 -42
@@ -151,7 +151,7 @@ Program(Deref(Symbol))
 
 # SyntaxQuote Unquote
 `(vector ~x)
-==> Program(SyntaxQuote(List(Symbol,Unquote(Symbol))))
+==> Program(SyntaxQuote(List(Operator,Unquote(Symbol))))
 
 # Meta
 ^{:hello :world} :my-expr ^String :more ^:dynamic :test
@@ -163,56 +163,56 @@ Program(Deref(Symbol))
 
 # Def
 (def foo)
-==> Program(List(Def,VarName(Symbol)))
+==> Program(List(Operator,VarName(Symbol)))
 
 # Def Expression
 (def foo :bar)
-==> Program(List(Def,VarName(Symbol),Keyword))
+==> Program(List(Operator,VarName(Symbol),Keyword))
 
 # Def Expression 2
 (def foo :bar :foo)
-==> Program(List(Def,VarName(Symbol),Keyword,Keyword))
+==> Program(List(Operator,VarName(Symbol),Keyword,Keyword))
 
 # Def + String
 (def foo "doc")
-==> Program(List(Def,VarName(Symbol),String))
+==> Program(List(Operator,VarName(Symbol),String))
 
 # Def + DocString + Keyword
 (def foo "doc" :foo)
-==> Program(List(Def,VarName(Symbol),DocString(String),Keyword))
+==> Program(List(Operator,VarName(Symbol),DocString(String),Keyword))
 
 # Def + DocString + Keyword
 (def ^:hello foo "doc" :foo)
-==> Program(List(Def,VarName(Meta(Keyword), Symbol),DocString(String),Keyword))
+==> Program(List(Operator,VarName(Meta(Keyword), Symbol),DocString(String),Keyword))
 
 # Def + DocString + String + String
 (def foo "doc" "foo" "bar")
-==> Program(List(Def,VarName(Symbol),DocString(String),String,String))
+==> Program(List(Operator,VarName(Symbol),DocString(String),String,String))
 
 # Defn
 (defn foo [] "bar")
-==> Program(List(Defn,VarName(Symbol),Vector,String))
+==> Program(List(Operator,VarName(Symbol),Vector,String))
 
 # Defn-
 (defn- foo [])
-==> Program(List(Defn,VarName(Symbol),Vector))
+==> Program(List(Operator,VarName(Symbol),Vector))
 
 # Defn + DocString
 (defn foo "doc" [] "bar")
-==> Program(List(Defn,VarName(Symbol),DocString(String),Vector,String))
+==> Program(List(Operator,VarName(Symbol),DocString(String),Vector,String))
 
 # Defn + ConditionMap
 (defn foo [] {:pre []} "bar")
-==> Program(List(Defn,VarName(Symbol),Vector,Map(Keyword,Vector),String))
+==> Program(List(Operator,VarName(Symbol),Vector,Map(Keyword,Vector),String))
 
 
 # Defn Variadic
 (defn greet ([] (println "hello")))
-==> Program(List(Defn,VarName(Symbol),List(Vector(),List(Symbol,String))))
+==> Program(List(Operator,VarName(Symbol),List(Vector(),List(Operator,String))))
 
 # Defn Variadic 2
 (defn greet "doc" ([] (greet "mary")) ([name] (println "hello" name)))
-==> Program(List(Defn,VarName(Symbol),DocString(String),List(Vector,List(Symbol,String)),List(Vector(Symbol),List(Symbol,String,Symbol))))
+==> Program(List(Operator,VarName(Symbol),DocString(String),List(Vector,List(Operator,String)),List(Vector(Symbol),List(Operator,String,Symbol))))
 
 # Var
 #'hello
@@ -232,7 +232,7 @@ Program(Deref(Symbol))
 
 # Anonymous Function
 #(inc x)
-==> Program(AnonymousFunction(Symbol, Symbol))
+==> Program(AnonymousFunction(Operator, Symbol))
 
 # Unbalanced map
 {:x}
