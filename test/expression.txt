@@ -153,13 +153,13 @@ Program(Deref(Symbol))
 `(vector ~x)
 ==> Program(SyntaxQuote(List(Symbol,Unquote(Symbol))))
 
-# WithMeta
+# Meta
 ^{:hello :world} :my-expr ^String :more ^:dynamic :test
-==> Program(WithMeta(Map(Keyword,Keyword),Keyword),WithMeta(Symbol,Keyword), WithMeta(Keyword,Keyword))
+==> Program(Meta(Map(Keyword,Keyword)),Keyword,Meta(Symbol),Keyword,Meta(Keyword),Keyword)
 
-# WithMeta Multiple
+# Meta Multiple
 ^:dynamic ^ints obj
-==> Program(WithMeta(Keyword,WithMeta(Symbol,Symbol)))
+==> Program(Meta(Keyword),Meta(Symbol),Symbol)
 
 # Def
 (def foo)
@@ -181,6 +181,10 @@ Program(Deref(Symbol))
 (def foo "doc" :foo)
 ==> Program(List(Def,VarName(Symbol),DocString(String),Keyword))
 
+# Def + DocString + Keyword
+(def ^:hello foo "doc" :foo)
+==> Program(List(Def,VarName(Meta(Keyword), Symbol),DocString(String),Keyword))
+
 # Def + DocString + String + String
 (def foo "doc" "foo" "bar")
 ==> Program(List(Def,VarName(Symbol),DocString(String),String,String))
@@ -188,6 +192,10 @@ Program(Deref(Symbol))
 # Defn
 (defn foo [] "bar")
 ==> Program(List(Defn,VarName(Symbol),Vector,String))
+
+# Defn-
+(defn- foo [])
+==> Program(List(Defn,VarName(Symbol),Vector))
 
 # Defn + DocString
 (defn foo "doc" [] "bar")
