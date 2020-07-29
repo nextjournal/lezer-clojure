@@ -125,15 +125,15 @@ Program(Character,Character,Character,Character,Character,Character)
 ==>
 Program(LineComment, LineComment)
 
-# Ignore next form
+# Discard next form
 :hello #_ :ignored
 ==>
-Program(Keyword, Ignored(Keyword))
+Program(Keyword, Discard(Keyword))
 
-# Ignore next two forms
+# Discard next two forms
 #_#_ :ignored also-ignored "not-ignored"
 ==>
-Program(Ignored(Ignored(Keyword), Symbol), String)
+Program(Discard(Discard(Keyword), Symbol), String)
 
 
 # Deref
@@ -153,8 +153,12 @@ Program(Deref(Symbol))
 `(vector ~x)
 ==> Program(SyntaxQuote(List(Operator,Unquote(Symbol))))
 
+# SyntaxQuote Unquote-Splice
+`(~@x)
+==> Program(SyntaxQuote(List(UnquoteSplice(Symbol))))
+
 # Meta
-^{:hello :world} :my-expr ^String :more ^:dynamic :test
+^{:hello :world} :my-expr #^String :more ^:dynamic :test
 ==> Program(Meta(Map(Keyword,Keyword)),Keyword,Meta(Symbol),Keyword,Meta(Keyword),Keyword)
 
 # Meta Multiple
@@ -231,9 +235,17 @@ Program(Deref(Symbol))
 ==> Program(SymbolicValue)
 
 # Anonymous Function
-#(inc x)
+#(inc %)
 ==> Program(AnonymousFunction(Operator, Symbol))
 
 # Unbalanced map
 {:x}
 ==> Program(Map(Keyword))
+
+# Gensym
+sym#
+==> Program(Symbol)
+
+# Earmuffs and channel macros
+*sym* >! <! !x x? x! _ ,
+==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
