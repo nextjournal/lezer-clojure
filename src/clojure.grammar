@@ -19,10 +19,10 @@ map { "{" expression* "}" }
 Map { map }
 
 @skip {} {
-  Set { "#" map }
+  Set { "#" Map }
   AnonymousFunction { "#" list }
   NamespacedMap { "#" Keyword Map }
-  RegExp { "#" string }
+  RegExp { "#" String }
   Var { "#'" Symbol }
   ReaderConditional { "#?" (List | Deref) }
   DataLiteral { "#" ident }
