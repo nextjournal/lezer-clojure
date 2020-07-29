@@ -15,7 +15,7 @@ listContents {
 list { "(" listContents ")" }
 List { list }
 Vector { "[" expression* "]" }
-map { "{" (expression expression)* "}" }
+map { "{" expression* "}" }
 Map { map }
 
 @skip {} {

@@ -233,3 +233,7 @@ Program(Deref(Symbol))
 # Anonymous Function
 #(inc x)
 ==> Program(AnonymousFunction(Symbol, Symbol))
+
+# Unbalanced map
+{:x}
+==> Program(Map(Keyword))
