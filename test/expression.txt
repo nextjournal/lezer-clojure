@@ -86,7 +86,7 @@ Program(List, Map, Vector)
 # Sharps
 #{} #"\d" #:kw{}
 ==>
-Program(Set(Map), RegExp(String), NamespacedMap(Keyword,Map))
+Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(Keyword,Map))
 
 # Symbols
 foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
@@ -107,7 +107,7 @@ Program(Boolean,Boolean)
 "hello" "and
  multiline"
 ==>
-Program(String, String)
+Program(String(StringContent), String(StringContent))
 
 # Nil
 nil
@@ -133,7 +133,7 @@ Program(Keyword, Discard(Keyword))
 # Discard next two forms
 #_#_ :ignored also-ignored "not-ignored"
 ==>
-Program(Discard(Discard(Keyword), Symbol), String)
+Program(Discard(Discard(Keyword), Symbol), String(StringContent))
 
 
 # Deref
@@ -165,66 +165,13 @@ Program(Deref(Symbol))
 ^:dynamic ^ints obj
 ==> Program(Meta(Keyword),Meta(Symbol),Symbol)
 
-# Def
-(def foo)
-==> Program(List(Operator,VarName(Symbol)))
-
-# Def Expression
-(def foo :bar)
-==> Program(List(Operator,VarName(Symbol),Keyword))
-
-# Def Expression 2
-(def foo :bar :foo)
-==> Program(List(Operator,VarName(Symbol),Keyword,Keyword))
-
-# Def + String
-(def foo "doc")
-==> Program(List(Operator,VarName(Symbol),String))
-
-# Def + DocString + Keyword
-(def foo "doc" :foo)
-==> Program(List(Operator,VarName(Symbol),DocString(String),Keyword))
-
-# Def + DocString + Keyword
-(def ^:hello foo "doc" :foo)
-==> Program(List(Operator,VarName(Meta(Keyword), Symbol),DocString(String),Keyword))
-
-# Def + DocString + String + String
-(def foo "doc" "foo" "bar")
-==> Program(List(Operator,VarName(Symbol),DocString(String),String,String))
-
-# Defn
-(defn foo [] "bar")
-==> Program(List(Operator,VarName(Symbol),Vector,String))
-
-# Defn-
-(defn- foo [])
-==> Program(List(Operator,VarName(Symbol),Vector))
-
-# Defn + DocString
-(defn foo "doc" [] "bar")
-==> Program(List(Operator,VarName(Symbol),DocString(String),Vector,String))
-
-# Defn + ConditionMap
-(defn foo [] {:pre []} "bar")
-==> Program(List(Operator,VarName(Symbol),Vector,Map(Keyword,Vector),String))
-
-
-# Defn Variadic
-(defn greet ([] (println "hello")))
-==> Program(List(Operator,VarName(Symbol),List(Vector(),List(Operator,String))))
-
-# Defn Variadic 2
-(defn greet "doc" ([] (greet "mary")) ([name] (println "hello" name)))
-==> Program(List(Operator,VarName(Symbol),DocString(String),List(Vector,List(Operator,String)),List(Vector(Symbol),List(Operator,String,Symbol))))
-
 # Var
 #'hello
 ==> Program(Var(Symbol))
 
 # Reader Conditional
 #?(:cljs "hello") #?@(:cljs ["hello"])
-==> Program(ReaderConditional(List(Keyword,String)),ReaderConditional(Deref(List(Keyword,Vector(String)))))
+==> Program(ReaderConditional("#?", List(Keyword,String(StringContent))),ReaderConditional(Deref(List(Keyword,Vector(String(StringContent))))))
 
 # Data Literal
 #uuid
@@ -236,7 +183,7 @@ Program(Deref(Symbol))
 
 # Anonymous Function
 #(inc %)
-==> Program(AnonymousFunction(Operator, Symbol))
+==> Program(AnonymousFunction("#", List(Operator, Symbol)))
 
 # Unbalanced map
 {:x}
