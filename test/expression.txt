@@ -194,8 +194,8 @@ sym#
 ==> Program(Symbol)
 
 # Earmuffs and channel macros
-*sym* >! <! !x x? x! _ ,
-==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
+*sym* >! <! !x x? x! _ , . ..
+==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
 
 # Def
 (def foo)

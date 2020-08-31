@@ -70,7 +70,7 @@ Operator { !operator ident }
 
   LineComment { ";" ![\n]* }
 
-  identStart { std.asciiLetter | $[<>_=?!*+\-$\u{a1}-\u{10ff}] }
+  identStart { std.asciiLetter | $[<>._=?!*+\-$\u{a1}-\u{10ff}] }
   identChar { identStart (std.digit | ":" | "." | "'" | "#")* }
   simpleIdent { identStart identChar* }
   qualifiedIdent { simpleIdent "/" identChar+ }
