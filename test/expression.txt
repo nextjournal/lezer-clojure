@@ -1,7 +1,7 @@
 # Add
 (+ 1 2)
 ==>
-Program(List(Symbol,Number,Number))
+Program(List(Operator,Number,Number))
 
 # Numbers
 42 +42 -42
@@ -79,9 +79,14 @@ Program(Number,Number,Number,Number,Number,Number,Number,Number,Number,Number,Nu
 Program(Number,Number,Number)
 
 # Literals
-() {} [] #{} #"\d"
+() {} []
 ==>
-Program(List, Map, Vector, Set, RegExp)
+Program(List, Map, Vector)
+
+# Sharps
+#{} #"\d" #:kw{}
+==>
+Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(KeywordPrefix,Map))
 
 # Symbols
 foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
@@ -89,9 +94,9 @@ foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
 Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
 # Keywords
-:hi :hi/ho ::ho :*+!-_? :abc:def:ghi
+:hi :hi/ho ::ho ::hi/ho :*+!-_? :abc:def:ghi
 ==>
-Program(Keyword,Keyword,Keyword,Keyword,Keyword)
+Program(Keyword,Keyword,Keyword,Keyword,Keyword,Keyword)
 
 # Boolean
 true false
@@ -102,7 +107,7 @@ Program(Boolean,Boolean)
 "hello" "and
  multiline"
 ==>
-Program(String, String)
+Program(String(StringContent), String(StringContent))
 
 # Nil
 nil
@@ -120,83 +125,86 @@ Program(Character,Character,Character,Character,Character,Character)
 ==>
 Program(LineComment, LineComment)
 
-# Ignore next form
+# Discard next form
 :hello #_ :ignored
 ==>
-Program(Keyword, Ignored(IgnoreNext,Keyword))
+Program(Keyword, Discard(Keyword))
 
-# Ignore next two forms
+# Discard next two forms
 #_#_ :ignored also-ignored "not-ignored"
 ==>
-Program(Ignored(IgnoreNext,Ignored(IgnoreNext,Keyword), Symbol), String)
+Program(Discard(Discard(Keyword), Symbol), String(StringContent))
 
 
 # Deref
 @hello
 ==>
-Program(Deref,Symbol)
+Program(Deref(Symbol))
 
 # Quote
 'bar
-==> Program(Quoted(Quote,Symbol))
+==> Program(Quote(Symbol))
 
 # SyntaxQuote
 `(1)
-==> Program(SyntaxQuoted(SyntaxQuote,List(Number)))
+==> Program(SyntaxQuote(List(Number)))
 
 # SyntaxQuote Unquote
 `(vector ~x)
-==> Program(SyntaxQuoted(SyntaxQuote,List(Symbol,Unquoted(Unquote,Symbol))))
+==> Program(SyntaxQuote(List(Operator,Unquote(Symbol))))
 
-# Metadata
-^{:hello :world} :my-expr ^String :more ^:dynamic :test 
-==> Program(Metadata(Meta,Map(Keyword,Keyword),Keyword),Metadata(Meta,Symbol,Keyword), Metadata(Meta,Keyword,Keyword))
+# SyntaxQuote Unquote-Splice
+`(~@x)
+==> Program(SyntaxQuote(List(UnquoteSplice(Symbol))))
 
-# Metadata Multiple
+# Meta
+^{:hello :world} :my-expr #^String :more ^:dynamic :test
+==> Program(Meta(Metadata(Map(Keyword,Keyword)),Keyword),Meta(Metadata(Symbol),Keyword),Meta(Metadata(Keyword),Keyword))
+
+# Meta Multiple
 ^:dynamic ^ints obj
-==> Program(Metadata(Meta,Keyword,Metadata(Meta,Symbol,Symbol)))
+==> Program(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Symbol)))
+
+# Var
+#'hello
+==> Program(Var(Symbol))
+
+# Reader Conditional
+#?(:cljs "hello") #?@(:cljs ["hello"])
+==> Program(ReaderConditional("#?", List(Keyword,String(StringContent))),ReaderConditional(Deref(List(Keyword,Vector(String(StringContent))))))
+
+# Data Literal
+#uuid
+==> Program(DataLiteral)
+
+# Symbolic Value
+##Inf
+==> Program(SymbolicValue)
+
+# Anonymous Function
+#(inc %)
+==> Program(AnonymousFunction("#", List(Operator, Symbol)))
+
+# Unbalanced map
+{:x}
+==> Program(Map(Keyword))
+
+# Gensym
+sym#
+==> Program(Symbol)
+
+# Earmuffs and channel macros
+*sym* >! <! !x x? x! _ , . ..
+==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
 
 # Def
 (def foo)
-==> Program(List("(",Def,Var(Symbol),")"))
-
-# Def Expression
-(def foo :bar)
-==> Program(List("(",Def,Var(Symbol),Keyword,")"))
-
-# Def Expression 2
-(def foo :bar :foo)
-==> Program(List("(",Def,Var(Symbol),Keyword,Keyword,")"))
+==> Program(List("(",DefLike,VarName(Symbol),")"))
 
 # Def + String
-(def foo "doc")
-==> Program(List("(",Def,Var(Symbol),String")"))
+(defn foo "string")
+==> Program(List("(",DefLike,VarName(Symbol),String(StringContent),")"))
 
-# Def + DocString + Keyword
-(def foo "doc" :foo)
-==> Program(List("(",Def,Var(Symbol),DocString(String),Keyword,")"))
-
-# Def + DocString + String + String
-(def foo "doc" "foo" "bar")
-==> Program(List("(",Def,Var(Symbol),DocString(String),String,String,")"))
-
-# Defn
-(defn foo [] "bar")
-==> Program(List("(",Defn,Var(Symbol),Vector,String,")"))
-
-# Defn + DocString
-(defn foo "doc" [] "bar")
-==> Program(List(Defn,Var(Symbol),DocString(String),Vector,String))
-
-# Defn + ConditionMap
-(defn foo [] {:pre []} "bar")
-==> Program(List(Defn,Var(Symbol),Vector,Map(Keyword,Vector),String))
-
-
-# Defn Variadic
-(defn greet ([] (println "hello")))
-==> Program(List(Defn,Var(Symbol),List(Vector(),List(Symbol,String))))
-
-# Defn Variadic 2
-(defn greet "doc" ([] (greet "mary")) ([name] (println "hello" name)))
-==> Program(List(Defn,Var(Symbol),DocString(String),List(Vector,List(Symbol,String)),List(Vector(Symbol),List(Symbol,String,Symbol))))
+# Def + DocString
+(defn foo "string" :bar)
+==> Program(List("(",DefLike,VarName(Symbol),DocString(String(StringContent)),Keyword")"))
