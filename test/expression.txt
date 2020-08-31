@@ -159,11 +159,11 @@ Program(Deref(Symbol))
 
 # Meta
 ^{:hello :world} :my-expr #^String :more ^:dynamic :test
-==> Program(Meta(Map(Keyword,Keyword)),Keyword,Meta(Symbol),Keyword,Meta(Keyword),Keyword)
+==> Program(Meta(Metadata(Map(Keyword,Keyword)),Keyword),Meta(Metadata(Symbol),Keyword),Meta(Metadata(Keyword),Keyword))
 
 # Meta Multiple
 ^:dynamic ^ints obj
-==> Program(Meta(Keyword),Meta(Symbol),Symbol)
+==> Program(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Symbol)))
 
 # Var
 #'hello
@@ -194,5 +194,17 @@ sym#
 ==> Program(Symbol)
 
 # Earmuffs and channel macros
-*sym* >! <! !x x? x! _ ,
-==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
+*sym* >! <! !x x? x! _ , . ..
+==> Program(Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol, Symbol)
+
+# Def
+(def foo)
+==> Program(List("(",DefLike,VarName(Symbol),")"))
+
+# Def + String
+(defn foo "string")
+==> Program(List("(",DefLike,VarName(Symbol),String(StringContent),")"))
+
+# Def + DocString
+(defn foo "string" :bar)
+==> Program(List("(",DefLike,VarName(Symbol),DocString(String(StringContent)),Keyword")"))
