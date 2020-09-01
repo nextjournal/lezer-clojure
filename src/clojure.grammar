@@ -1,13 +1,13 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Discard }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Meta | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
 Discard { "#_" expression }
 @precedence { docString @left, operator @left, meta @right }
 
 listContents {
-   defList  { Metadata? DefLike Metadata? VarName (DocString expression+ | expression+)? } |
-   anyList { (Metadata? Operator)? expression* }
+   defList  { (DefLike | Meta<DefLike>) (VarName | Meta<VarName>) (DocString expression+ | expression+)? } |
+   anyList { (Operator | Meta<Operator>)? expression* }
  }
 
 DocString { !docString String }
@@ -25,11 +25,11 @@ VarName { Symbol }
   ReaderConditional { "#?" (List | Deref) }
   DataLiteral { "#" ident }
   SymbolicValue { "##" simpleIdent }
-  Metadata { ("^" | "#^") expression }
+  Metadata<t> { ("^" | "#^") t }
   String { '"' StringContent? '"' }
 }
 
-Meta { Metadata !meta expression }
+Meta<t> { Metadata<t> !meta t }
 
 Deref { "@" expression }
 Quote { "'" expression }
