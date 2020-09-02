@@ -165,6 +165,15 @@ Program(Deref(Symbol))
 ^:dynamic ^ints obj
 ==> Program(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Symbol)))
 
+# Meta Operator
+(^:dynamic + 1)
+==> Program(List(Meta(Metadata(Keyword),Operator), Number))
+
+# Meta Multiple Operator
+(^:dynamic ^ints + 1 2)
+==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Operator)), Number, Number))
+
+
 # Var
 #'hello
 ==> Program(Var(Symbol))
@@ -203,8 +212,17 @@ sym#
 
 # Def + String
 (defn foo "string")
-==> Program(List("(",DefLike,VarName(Symbol),String(StringContent),")"))
+==> Program(List(DefLike,VarName(Symbol),String(StringContent)))
 
 # Def + DocString
 (defn foo "string" :bar)
-==> Program(List("(",DefLike,VarName(Symbol),DocString(String(StringContent)),Keyword")"))
+==> Program(List(DefLike,VarName(Symbol),DocString(String(StringContent)),Keyword))
+
+# Meta Multiple Def
+(^:hello ^world def foo)
+==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),DefLike)), VarName(Symbol)))
+
+# Meta Multiple VarName
+(def ^:static ^clojure.lang.ChunkBuffer chunk-buffer)
+==> Program(List(DefLike,Meta(Metadata(Keyword),Meta(Metadata(Symbol),VarName(Symbol)))))
+
