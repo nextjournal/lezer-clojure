@@ -6,8 +6,8 @@ Discard { "#_" expression }
 @precedence { docString @left, operator @left, meta @right }
 
 listContents {
-   defList  { (DefLike | Meta<DefLike>) (VarName | Meta<VarName>) (DocString expression+ | expression+)? } |
-   anyList { (Operator | Meta<Operator>)? expression* }
+   defList  { defLikeWithMeta varNameWithMeta (DocString expression+ | expression+)? } |
+   anyList { operatorWithMeta? expression* }
  }
 
 DocString { !docString String }
@@ -37,6 +37,10 @@ SyntaxQuote { "`" expression }
 Unquote { "~" expression }
 UnquoteSplice { "~@" expression }
 Symbol { ident }
+operatorWithMeta { Operator | Meta<operatorWithMeta> }
+defLikeWithMeta { DefLike | Meta<defLikeWithMeta> }
+varNameWithMeta { VarName | Meta<varNameWithMeta> }
+
 Operator { !operator ident }
 
 @tokens {
