@@ -25,11 +25,11 @@ VarName { Symbol }
   ReaderConditional { "#?" (List | Deref) }
   DataLiteral { "#" ident }
   SymbolicValue { "##" simpleIdent }
-  Metadata<t> { ("^" | "#^") t }
+  Metadata { ("^" | "#^") expression }
   String { '"' StringContent? '"' }
 }
 
-Meta<t> { Metadata<t> !meta t }
+Meta<t> { Metadata !meta t }
 
 Deref { "@" expression }
 Quote { "'" expression }

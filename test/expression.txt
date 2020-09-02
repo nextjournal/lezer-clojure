@@ -220,9 +220,9 @@ sym#
 
 # Meta Multiple Def
 (^:hello ^world def foo)
-==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),DefLike)), Symbol))
+==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),DefLike)), VarName(Symbol)))
 
 # Meta Multiple VarName
 (def ^:static ^clojure.lang.ChunkBuffer chunk-buffer)
-==> Program(List(DefLike,Meta(Metadata(Keyword),Meta(Metadata(Symbol),VarName(Symbol))))
+==> Program(List(DefLike,Meta(Metadata(Keyword),Meta(Metadata(Symbol),VarName(Symbol)))))
 
