@@ -89,7 +89,7 @@ Program(List, Map, Vector)
 Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(KeywordPrefix,Map))
 
 # Symbols
-foo foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
+f1 foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
 ==>
 Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
