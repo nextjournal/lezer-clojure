@@ -1,6 +1,6 @@
 import { DefLike, Boolean, Nil } from "./parser.terms.js"
 
-export const specializeIdent = function(value, stack) {
+export const specializeSymbol = function(value, stack) {
     switch(value) {
     case "nil":
         return Nil;

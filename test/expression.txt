@@ -1,7 +1,7 @@
 # Add
 (+ 1 2)
 ==>
-Program(List(Operator,Number,Number))
+Program(List(Operator(Symbol),Number,Number))
 
 # Numbers
 42 +42 -42
@@ -151,7 +151,7 @@ Program(Deref(Symbol))
 
 # SyntaxQuote Unquote
 `(vector ~x)
-==> Program(SyntaxQuote(List(Operator,Unquote(Symbol))))
+==> Program(SyntaxQuote(List(Operator(Symbol),Unquote(Symbol))))
 
 # SyntaxQuote Unquote-Splice
 `(~@x)
@@ -167,11 +167,11 @@ Program(Deref(Symbol))
 
 # Meta Operator
 (^:dynamic + 1)
-==> Program(List(Meta(Metadata(Keyword),Operator), Number))
+==> Program(List(Meta(Metadata(Keyword),Operator(Symbol)), Number))
 
 # Meta Multiple Operator
 (^:dynamic ^ints + 1 2)
-==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Operator)), Number, Number))
+==> Program(List(Meta(Metadata(Keyword),Meta(Metadata(Symbol),Operator(Symbol))), Number, Number))
 
 
 # Var
@@ -192,7 +192,7 @@ Program(Deref(Symbol))
 
 # Anonymous Function
 #(inc %)
-==> Program(AnonymousFunction("#", List(Operator, Symbol)))
+==> Program(AnonymousFunction("#", List(Operator(Symbol), Symbol)))
 
 # Unbalanced map
 {:x}
@@ -226,3 +226,14 @@ sym#
 (def ^:static ^clojure.lang.ChunkBuffer chunk-buffer)
 ==> Program(List(DefLike,Meta(Metadata(Keyword),Meta(Metadata(Symbol),VarName(Symbol)))))
 
+# Def Defn
+(def defn (fn []))
+==> Program(List(DefLike,VarName(Symbol),List(Operator(Symbol),Vector)))
+
+# Defonce
+(defonce default "doc" default)
+==> Program(List(DefLike,VarName(Symbol),DocString(String(StringContent)),Symbol))
+
+# Def Default
+(def default bar)
+==> Program(List(DefLike,VarName(Symbol),Symbol))
