@@ -3,7 +3,7 @@
 @skip { whitespace }
 expression { Symbol | List }
 
-List { "(" (DefLike VarName expression? | expression*) ")" }
+List { "(" (DefLike VarName expression+ | expression*) ")" }
 VarName { Symbol }
 
 @tokens {
