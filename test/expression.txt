@@ -237,3 +237,7 @@ sym#
 # Def Default
 (def default bar)
 ==> Program(List(DefLike,VarName(Symbol),Symbol))
+
+# Defmacro
+(defmacro ..)
+==> Program(List(DefLike,VarName(Symbol)))
