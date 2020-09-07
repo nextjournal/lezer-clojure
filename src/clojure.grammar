@@ -1,111 +1,18 @@
 @top[name=Program] { expression* }
 
-@skip { whitespace | LineComment | Discard }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
-Discard { "#_" expression }
-@precedence { docString @left, operator @left, meta @right }
+@skip { whitespace }
+expression { Symbol | List }
 
-listContents {
-   defList  { defLikeWithMeta varNameWithMeta (DocString expression+ | expression+)? } |
-   anyList { operatorWithMeta? expression* }
- }
-
-DocString { !docString String }
-List { "(" listContents ")" }
-Vector { "[" expression* "]" }
-Map { "{" expression* "}" }
+List { "(" (DefLike VarName expression? | expression*) ")" }
 VarName { Symbol }
 
-@skip {} {
-  Set { "#" Map }
-  AnonymousFunction { "#" List }
-  NamespacedMap { "#" KeywordPrefix Map }
-  RegExp { "#" String }
-  Var { "#'" Symbol }
-  ReaderConditional { "#?" (List | Deref) }
-  DataLiteral { "#" ident }
-  SymbolicValue { "##" simpleIdent }
-  Metadata { ("^" | "#^") expression }
-  String { '"' StringContent? '"' }
-}
-
-Meta<t> { Metadata !meta t }
-
-Deref { "@" expression }
-Quote { "'" expression }
-SyntaxQuote { "`" expression }
-Unquote { "~" expression }
-UnquoteSplice { "~@" expression }
-operatorWithMeta { Operator | Meta<operatorWithMeta> }
-defLikeWithMeta { DefLike | Meta<defLikeWithMeta> }
-varNameWithMeta { VarName | Meta<varNameWithMeta> }
-
-Operator { !operator Symbol }
-
 @tokens {
-
-
-  "["
-  "{"
   "("
-
-  "#"
-  "##"
-  "#'"
-  "#?"
-  "#^"
-  "#_"
-
-  '"'
-  "'"
-  "`"
-  "~"
-  "~@"
-  "^"
-  "@"
-
-
-  "]"
-  "}"
   ")"
-
-  whitespace { (std.whitespace | ",")+ }
-
-  LineComment { ";" ![\n]* }
-
-  identStart { std.asciiLetter | $[<>._=?!*+\-$\u{a1}-\u{10ff}] }
-  identChar { identStart | std.digit | ":" | "'" | "#" }
-  simpleIdent { identStart identChar* }
-  qualifiedIdent { simpleIdent "/" identChar+ }
-  ident { simpleIdent | qualifiedIdent }
-  Symbol { ident }
-
-  keyword { ":" ":"? ident }
-  Keyword { keyword }
-  KeywordPrefix { keyword }
-
-  Number {
-    ("+" | "-")? (std.digit+ ("." std.digit* "M"?)? | "." std.digit+) (("e" | "E") ("+" | "-")? std.digit+ "M"?)? |
-    ("+" | "-")? std.digit+ ("M" | "N") |
-    ("+" | "-")? std.digit+ "/" std.digit+ |
-    ("+" | "-")? "0x" (std.digit | $[a-fA-F])+ |
-    "0b" $[01]+ |
-    "0o" $[0-7]+
-  }
-  @precedence { Number, Symbol }
-
-  StringContent {
-    (!["] | "\\" _)+
-  }
-
-  Character { "\\" (std.asciiLetter | std.digit | "@")+ }
-
-  FnArg[name=Symbol] { "%" (std.digit* | "&"?) }
-
+  whitespace { std.whitespace }
+  Symbol { std.asciiLetter+ }
 }
 
-Boolean { @specialize<Symbol, "true" | "false"> }
-Nil { @specialize<Symbol, "nil"> }
-DefLike { @extend<Symbol, "def" | "defn" | "defonce" | "deftest" | "defcard"> }
+DefLike { @extend<Symbol, "def" | "defn"> }
 
 @detectDelim
