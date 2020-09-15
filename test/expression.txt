@@ -159,7 +159,7 @@ Program(Deref(Symbol))
 
 # Meta
 ^{:hello :world} :my-expr #^String :more ^:dynamic :test
-==> Program(Meta(Metadata(Map(Keyword,Keyword)),Keyword),Meta(Metadata(Symbol),Keyword),Meta(Metadata(Keyword),Keyword))
+==> Program(Meta(Metadata(Map(Keyword,Keyword)),Keyword),Meta(ReaderMetadata(Symbol),Keyword),Meta(Metadata(Keyword),Keyword))
 
 # Meta Multiple
 ^:dynamic ^ints obj

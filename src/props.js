@@ -1,4 +1,4 @@
-const {NodeProp} = require("lezer-tree")
+import {NodeProp} from "lezer-tree"
 
 export const prefixColl = NodeProp.flag()
 export const coll = NodeProp.flag()
