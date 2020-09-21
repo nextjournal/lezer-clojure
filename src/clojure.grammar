@@ -6,9 +6,9 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Discard }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> | "]" | "}" | ")"}
 Discard { "#_" expression }
-@precedence { docString @left, operator @left, meta @right }
+@precedence { docString @left, operator @left, meta @right, closing @left }
 
 listContents {
    defList { defLikeWithMeta varNameWithMeta (DocString expression+ | expression+)? } |
@@ -16,9 +16,9 @@ listContents {
  }
 
 DocString { !docString String }
-List[coll] { "(" listContents ")" }
-Vector[coll] { "[" expression* "]" }
-Map[coll] { "{" expression* "}" }
+List[coll] { "(" listContents !closing ")" }
+Vector[coll] { "[" expression* !closing "]" }
+Map[coll] { "{" expression* !closing "}" }
 VarName { Symbol }
 
 @skip {} {
