@@ -6,8 +6,9 @@
 @top[name=Program] { expression* }
 
 @skip { whitespace | LineComment | Discard }
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> | "]" | "}" | ")"}
-Discard { "#_" expression }
+validExpression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
+expression { validExpression | "]" | "}" | ")" }
+Discard { "#_" validExpression }
 @precedence { docString @left, operator @left, meta @right, closing @left }
 
 listContents {
