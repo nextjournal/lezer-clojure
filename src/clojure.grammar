@@ -3,12 +3,14 @@
 @external prop prefixEdge from "./props"
 @external prop sameEdge from "./props"
 
-@top[name=Program] { expression* }
+@top[name=Program] { maybeInvalidExpression* }
 
 @skip { whitespace | LineComment | Discard }
-validExpression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
-expression { validExpression | "]" | "}" | ")" }
-Discard { "#_" validExpression }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | FnArg | Meta<expression> }
+maybeInvalidExpression { expression | "]" | "}" | ")" }
+
+Discard { "#_" maybeInvalidExpression }
+
 @precedence { docString @left, operator @left, meta @right, closing @left }
 
 listContents {
