@@ -241,3 +241,9 @@ sym#
 # Defmacro
 (defmacro ..)
 ==> Program(List(DefLike,VarName(Symbol)))
+
+# Division
+/
+==> Program(Symbol)
+
+
