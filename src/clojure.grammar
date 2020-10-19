@@ -2,7 +2,7 @@
 @external prop coll from "./props"
 @external prop prefixEdge from "./props"
 @external prop sameEdge from "./props"
-@external prop prefixForm from "./props"
+@external prop prefixContainer from "./props"
 
 @top[name=Program] { expression* }
 
@@ -43,7 +43,7 @@ VarName { Symbol }
   String { '"' StringContent? '"' }
 }
 
-Meta[prefixForm]<t> { (Metadata | ReaderMetadata) !meta t }
+Meta[prefixContainer]<t> { (Metadata | ReaderMetadata) !meta t }
 
 Deref[prefixColl] { "@" expression }
 Quote[prefixColl] { "'" expression }
