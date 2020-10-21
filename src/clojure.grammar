@@ -94,7 +94,7 @@ Operator { !operator Symbol }
   ident { simpleIdent | qualifiedIdent }
   Symbol { ident | "/" }
 
-  keyword { ":" ":"? ident }
+  keyword { ":" ":"? ident? } // the invalid token :: can also be considered as a keyword
   Keyword { keyword }
 
   Number {

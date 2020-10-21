@@ -84,9 +84,9 @@ Program(Number,Number,Number)
 Program(List, Map, Vector)
 
 # Sharps
-#{} #"\d" #:kw{}
+#{} #"\d" #:kw{} #::{}
 ==>
-Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(KeywordPrefix,Map))
+Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(KeywordPrefix,Map), NamespacedMap(KeywordPrefix,Map))
 
 # Symbols
 f1 foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
