@@ -1,6 +1,6 @@
 {
   "name": "lezer-clojure",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "lezer-based Clojure(Script) grammar",
   "main": "dist/index.cjs",
   "author": "Martin Kavalar <martin@nextjournal.com>",

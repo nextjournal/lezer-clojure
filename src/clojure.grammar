@@ -25,7 +25,7 @@ VarName { Symbol }
 @skip {} {
   dataLiteral { "#" ident }
   DataLiteral { dataLiteral }
-  SymbolicValue { "##" simpleIdent }
+  SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
   AnonymousFunction[prefixColl] { "#" List }
 
@@ -87,12 +87,10 @@ Operator { !operator Symbol }
 
   LineComment { ";" ![\n]* }
 
-  identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}] }
-  identChar { identStart | std.digit | ":" | "'" | "#" }
-  simpleIdent { identStart identChar* }
-  qualifiedIdent { simpleIdent "/" identChar+ }
-  ident { simpleIdent | qualifiedIdent }
-  Symbol { ident | "/" }
+  identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
+  identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
+  ident { identStart identChar* }
+  Symbol { ident }
 
   keyword { ":" ":"? ident? } // the invalid token :: can also be considered as a keyword
   Keyword { keyword }

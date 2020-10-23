@@ -89,9 +89,9 @@ Program(List, Map, Vector)
 Program(Set(Map), RegExp(String(StringContent)), NamespacedMap(KeywordPrefix,Map), NamespacedMap(KeywordPrefix,Map))
 
 # Symbols
-f1 foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno
+f1 foo/bar *+!-_? abc:def:ghi abc.def/ghi abc/def.ghi abc:def/ghi:jkl.mno a/ /
 ==>
-Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
+Program(Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol,Symbol)
 
 # Keywords
 :hi :hi/ho ::ho ::hi/ho :*+!-_? :abc:def:ghi
