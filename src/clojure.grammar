@@ -22,6 +22,41 @@ Vector[coll] { "[" expression* "]" }
 Map[coll] { "{" expression* "}" }
 VarName { Symbol }
 
+coll[@isGroup=Coll] {
+  List | Vector | Map
+}
+prefixColl[@isGroup=PrefixColl] {
+  Set |
+  AnonymousFunction |
+  NamespacedMap |
+  Constructor |
+  ReaderConditional |
+  ReaderMetadata |
+  Metadata |
+  Deref |
+  Quote |
+  SyntaxQuote |
+  Unquote |
+  UnquoteSplice
+}
+
+prefixEdge[@isGroup=PrefixEdge] {
+ KeywordPrefix |
+ ConstructorPrefix |
+ "#" |
+ "##" |
+ "#'" |
+ "#?" |
+ "#^" |
+ "#_" |
+ "'" |
+ "`" |
+ "~" |
+ "~@" |
+ "^" |
+ "@"
+}
+
 @skip {} {
   dataLiteral { "#" ident }
   DataLiteral { dataLiteral }
@@ -109,7 +144,10 @@ Operator { !operator Symbol }
     (!["] | "\\" _)+
   }
 
-  Character { "\\" (std.asciiLetter | std.digit | "@")+ }
+  multiChar { ("u" std.digit+) | ("o" std.digit+) | (std.asciiLetter std.asciiLetter+) }
+  singleChar { ![\n\r\s] }
+  @precedence { multiChar, singleChar }
+  Character { "\\" (multiChar | singleChar) }
 
 }
 
