@@ -22,41 +22,6 @@ Vector[coll] { "[" expression* "]" }
 Map[coll] { "{" expression* "}" }
 VarName { Symbol }
 
-coll[@isGroup=Coll] {
-  List | Vector | Map
-}
-prefixColl[@isGroup=PrefixColl] {
-  Set |
-  AnonymousFunction |
-  NamespacedMap |
-  Constructor |
-  ReaderConditional |
-  ReaderMetadata |
-  Metadata |
-  Deref |
-  Quote |
-  SyntaxQuote |
-  Unquote |
-  UnquoteSplice
-}
-
-prefixEdge[@isGroup=PrefixEdge] {
- KeywordPrefix |
- ConstructorPrefix |
- "#" |
- "##" |
- "#'" |
- "#?" |
- "#^" |
- "#_" |
- "'" |
- "`" |
- "~" |
- "~@" |
- "^" |
- "@"
-}
-
 @skip {} {
   dataLiteral { "#" ident }
   DataLiteral { dataLiteral }
