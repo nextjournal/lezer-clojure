@@ -111,7 +111,6 @@ Operator { !operator Symbol }
 
   multiChar { ("u" std.digit+) | ("o" std.digit+) | (std.asciiLetter std.asciiLetter+) }
   singleChar { ![\n\r\s] }
-  @precedence { multiChar, singleChar }
   Character { "\\" (multiChar | singleChar) }
 
 }
