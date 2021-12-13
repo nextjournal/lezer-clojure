@@ -109,9 +109,11 @@ Operator { !operator Symbol }
     (!["] | "\\" _)+
   }
 
-  multiChar { ("u" std.digit+) | ("o" std.digit+) | (std.asciiLetter std.asciiLetter+) }
-  singleChar { ![\n\r\s] }
-  Character { "\\" (multiChar | singleChar) }
+  unicodeChar { "u" $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F]}
+  octalChar { "o" $[0-3]? $[0-7] $[0-7]? }
+  specialChar { "newline" | "space" | "tab" | "formfeed" | "backspace" | "return" }
+  singleChar { ![\n] }
+  Character { "\\" ( octalChar | unicodeChar |  singleChar | specialChar ) }
 
 }
 

@@ -114,27 +114,30 @@ nil
 ==>
 Program(Nil)
 
+# simple chars
+\a \b \n \r \s
+==>
+Program(Character,Character,Character,Character,Character)
+
 # other chars
 \@ \; \[ \) \# \$ \' \\ \"
 ==>
 Program(Character,Character,Character,Character,Character,Character,Character,Character,Character)
 
 # unicode
-\u0194
+\u0194 \uFFFF
 ==>
-Program(Character)
+Program(Character,Character)
 
 # octal
-\o123
+\o123 \o372 \o0
 ==>
-Program(Character)
+Program(Character, Character, Character)
 
 # special-case chars
-\newline \space \backspace
-	\tab
-\formfeed \return \someOtherToken
+\newline \space \backspace \tab \formfeed \return
 ==>
-Program(Character,Character,Character,Character,Character,Character,Character)
+Program(Character,Character,Character,Character,Character,Character)
 
 # Line comments
 ;; comment
