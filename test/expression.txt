@@ -277,4 +277,3 @@ sym#
 # Constructors and Data Literals
 #a #b[] #a #b{}
 ==> Program(DataLiteral, Constructor(ConstructorPrefix,Vector), DataLiteral, Constructor(ConstructorPrefix,Map))
-

@@ -1,7 +1,10 @@
-import {NodeProp} from "lezer-tree"
+import {NodeProp} from "@lezer/common"
 
-export const prefixColl = NodeProp.flag()
-export const coll = NodeProp.flag()
-export const prefixEdge = NodeProp.flag()
-export const sameEdge = NodeProp.flag()
-export const prefixContainer = NodeProp.flag()
+// FIXME: naïvely restored to previoius NodeProp.flag() behaviour
+let flag = new NodeProp({deserialize: str => true})
+
+export const coll = flag
+export const prefixColl = flag
+export const prefixEdge = flag
+export const sameEdge = flag
+export const prefixContainer = flag
