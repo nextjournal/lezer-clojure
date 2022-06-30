@@ -10,7 +10,7 @@
 
 expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | SymbolicValue | AnonymousFunction | Meta<expression> | TaggedLiteral<expression> | ConstructorCall }
 Discard { "#_" expression }
-@precedence { docString @left, operator @left, meta @right, prefixLiteral @right }
+@precedence { docString @left, operator @left, meta @right}
 
 listContents {
    defList { defLikeWithMeta varNameWithMeta (DocString expression+ | expression+)? } |
@@ -25,7 +25,7 @@ VarName { Symbol }
 
 @skip {} {
   ReaderTag { "#" Symbol }
-  ConstructorPrefix { "#" !prefixLiteral dottedIdent }
+  ConstructorPrefix { "#" DottedIdent }
 
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
@@ -88,12 +88,14 @@ Operator { !operator Symbol }
 
   LineComment { ";" ![\n]* }
 
+  fragment { std.asciiLetter+ }
+  DottedIdent { fragment ("." fragment)+ }
+
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
   identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
   ident { identStart identChar* }
-  dottedIdent { ident ("." ident)+ }
-  Symbol { ident | dottedIdent }
-  
+  Symbol { ident }
+
   keyword { ":" ":"? ident? } // the invalid token :: can also be considered as a keyword
   Keyword { keyword }
 
@@ -105,7 +107,7 @@ Operator { !operator Symbol }
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
-  @precedence { Number, dottedIdent, Symbol }
+  @precedence { Number, DottedIdent, Symbol }
 
   StringContent {
     (!["] | "\\" _)+

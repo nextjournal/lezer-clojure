@@ -275,14 +275,17 @@ sym#
 ==> Program(Symbol)
 
 # Constructor
-#my.Foo [1]
-==> Program(ConstructorCall(ConstructorPrefix("#"),Vector("[",Number,"]")))
+#my.foo [1]
+==> Program(ConstructorCall(ConstructorPrefix("#", DottedIdent),Vector("[",Number,"]")))
 
-
-# Maybe
-foo.Bar
+# A Symbol with dots in namespace
+foo.bar/Bang
 ==> Program(Symbol)
 
-# Reader
-#my.foo/foo [1]
+# Reader Tag with namespace
+#my/foo [1]
+==> Program(TaggedLiteral(ReaderTag("#", Symbol),Vector("[",Number,"]")))
+
+# Reader Tag with dotted namespace
+#my.ns/foo [1]
 ==> Program(TaggedLiteral(ReaderTag("#", Symbol),Vector("[",Number,"]")))
