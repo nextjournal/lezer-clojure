@@ -279,7 +279,7 @@ sym#
 ==> Program(ConstructorCall(ConstructorPrefix("#", DottedIdent),Vector("[",Number,"]")))
 
 # A Symbol with dots in namespace
-foo.bar/Bang
+my.ns/foo
 ==> Program(Symbol)
 
 # Reader Tag with namespace

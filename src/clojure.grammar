@@ -88,7 +88,7 @@ Operator { !operator Symbol }
 
   LineComment { ";" ![\n]* }
 
-  fragment { std.asciiLetter+ }
+  fragment { std.asciiLetter+ } // TBD
   DottedIdent { fragment ("." fragment)+ }
 
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
