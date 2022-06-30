@@ -1,4 +1,3 @@
-import {Parser} from "lezer"
+import {Parser} from "@lezer/lr"
 
 export const parser: Parser
-
