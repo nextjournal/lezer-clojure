@@ -210,6 +210,10 @@ Program(Deref(Symbol))
 #uuid "31d20ceb-c7c2-40bb-9bd5-1e1e05f57ea1"
 ==> Program(TaggedLiteral(ReaderTag("#", Symbol), String(StringContent)))
 
+# Tagged Literal with multiple tags
+#tag/one #tag/two []
+==> Program(TaggedLiteral(ReaderTag("#", Symbol), TaggedLiteral(ReaderTag("#", Symbol), Vector)))
+
 # Symbolic Value
 ##Inf, ##-Inf
 ==> Program(SymbolicValue, SymbolicValue)
