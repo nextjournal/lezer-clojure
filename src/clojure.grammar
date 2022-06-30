@@ -8,7 +8,6 @@
 
 @skip { whitespace | LineComment | Discard }
 
-// FIXME: restore expression 'Constructor' after fixing insconsistent skipping sets
 expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | Meta<expression> }
 Discard { "#_" expression }
 @precedence { docString @left, operator @left, meta @right, prefixLiteral @right }
@@ -33,10 +32,6 @@ VarName { Symbol }
 
   KeywordPrefix[prefixEdge] { "#" keyword }
   NamespacedMap[prefixColl] { KeywordPrefix Map }
-
-  ConstructorPrefix[prefixEdge] { !prefixLiteral  dataLiteral }
-  // FIXME:
-  Constructor[prefixColl] { ConstructorPrefix (Vector | Map) }
 
   RegExp[prefixColl] { "#" String }
   Var[prefixColl] { "#'" Symbol }
