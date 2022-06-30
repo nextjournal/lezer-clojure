@@ -8,7 +8,7 @@
 
 @skip { whitespace | LineComment | Discard }
 
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | DataLiteral | SymbolicValue | AnonymousFunction | Meta<expression> }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | SymbolicValue | AnonymousFunction | Meta<expression> | TaggedLiteral<expression> }
 Discard { "#_" expression }
 @precedence { docString @left, operator @left, meta @right, prefixLiteral @right }
 
@@ -24,8 +24,7 @@ Map[coll] { "{" expression* "}" }
 VarName { Symbol }
 
 @skip {} {
-  dataLiteral { "#" ident }
-  DataLiteral { dataLiteral }
+  ReaderTag { "#" Symbol }
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
   AnonymousFunction[prefixColl] { "#" List }
@@ -42,6 +41,7 @@ VarName { Symbol }
 }
 
 Meta[prefixContainer]<t> { (Metadata | ReaderMetadata) !meta t }
+TaggedLiteral[prefixContainer]<t> { ReaderTag t }
 
 Deref[prefixColl] { "@" expression }
 Quote[prefixColl] { "'" expression }

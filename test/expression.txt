@@ -155,6 +155,10 @@ Program(Keyword, Discard(Keyword))
 ==>
 Program(Discard(Discard(Keyword), Symbol), String(StringContent))
 
+# Discarded Tagged Literal
+#_#hello/world [1] :foo
+==>
+Program(Discard("#_", TaggedLiteral(ReaderTag("#", Symbol) Vector("[",Number,"]"))), Keyword)
 
 # Deref
 @hello
@@ -202,9 +206,9 @@ Program(Deref(Symbol))
 #?(:cljs "hello") #?@(:cljs ["hello"])
 ==> Program(ReaderConditional("#?", List(Keyword,String(StringContent))),ReaderConditional(Deref(List(Keyword,Vector(String(StringContent))))))
 
-# Data Literal
-#uuid
-==> Program(DataLiteral)
+# Tagged Literal
+#uuid "31d20ceb-c7c2-40bb-9bd5-1e1e05f57ea1"
+==> Program(TaggedLiteral(ReaderTag("#", Symbol), String(StringContent)))
 
 # Symbolic Value
 ##Inf, ##-Inf
