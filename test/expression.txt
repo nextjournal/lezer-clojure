@@ -273,3 +273,16 @@ sym#
 # Division
 /
 ==> Program(Symbol)
+
+# Constructor
+#my.Foo [1]
+==> Program(ConstructorCall(ConstructorPrefix("#"),Vector("[",Number,"]")))
+
+
+# Maybe
+foo.Bar
+==> Program(Symbol)
+
+# Reader
+#my.foo/foo [1]
+==> Program(TaggedLiteral(ReaderTag("#", Symbol),Vector("[",Number,"]")))

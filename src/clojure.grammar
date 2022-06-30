@@ -8,7 +8,7 @@
 
 @skip { whitespace | LineComment | Discard }
 
-expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | SymbolicValue | AnonymousFunction | Meta<expression> | TaggedLiteral<expression> }
+expression { Boolean | Nil | Deref | Quote | SyntaxQuote | Unquote | UnquoteSplice | Symbol | Number | Keyword | List | Vector | Map | String | Character | Set | NamespacedMap | RegExp | Var | ReaderConditional | SymbolicValue | AnonymousFunction | Meta<expression> | TaggedLiteral<expression> | ConstructorCall }
 Discard { "#_" expression }
 @precedence { docString @left, operator @left, meta @right, prefixLiteral @right }
 
@@ -25,6 +25,8 @@ VarName { Symbol }
 
 @skip {} {
   ReaderTag { "#" Symbol }
+  ConstructorPrefix { "#" !prefixLiteral dottedIdent }
+
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
   AnonymousFunction[prefixColl] { "#" List }
@@ -42,6 +44,7 @@ VarName { Symbol }
 
 Meta[prefixContainer]<t> { (Metadata | ReaderMetadata) !meta t }
 TaggedLiteral[prefixContainer]<t> { ReaderTag t }
+ConstructorCall[prefixContainer] { ConstructorPrefix (Map | Vector) }
 
 Deref[prefixColl] { "@" expression }
 Quote[prefixColl] { "'" expression }
@@ -88,8 +91,9 @@ Operator { !operator Symbol }
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
   identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
   ident { identStart identChar* }
-  Symbol { ident }
-
+  dottedIdent { ident ("." ident)+ }
+  Symbol { ident | dottedIdent }
+  
   keyword { ":" ":"? ident? } // the invalid token :: can also be considered as a keyword
   Keyword { keyword }
 
@@ -101,7 +105,7 @@ Operator { !operator Symbol }
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
-  @precedence { Number, Symbol }
+  @precedence { Number, dottedIdent, Symbol }
 
   StringContent {
     (!["] | "\\" _)+
