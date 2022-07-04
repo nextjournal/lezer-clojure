@@ -25,7 +25,7 @@ VarName { Symbol }
 
 @skip {} {
   ReaderTag { "#" ReaderTagIdent }
-  ConstructorPrefix { "#" QualifiedJavaIdent }
+  ConstructorPrefix[prefixEdge] { "#" QualifiedJavaIdent }
 
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
