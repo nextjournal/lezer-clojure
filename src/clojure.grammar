@@ -93,14 +93,14 @@ Operator { !operator Symbol }
   // https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.8
   // class or constructor names
   javaIdentStart { std.asciiLetter | "_" | "$" | $[\u{a1}-\u{10ff}] }
-  javaIdentPart { javaIdentStart | std.digit }
-  javaIdent { javaIdentStart javaIdentPart* }
+  javaIdentChar { javaIdentStart | std.digit }
+  javaIdent { javaIdentStart javaIdentChar* }
   qualifiedJavaIdent { javaIdent ("." javaIdent)+ }
 
   // reader tags cannot contain dots
   readerTagIdentStart { std.asciiLetter | $[<>&%_=?!*+\-$\u{a1}-\u{10ff}] }
-  readerTagChar { readerTagIdentStart | "/" | std.digit }
-  readerTagIdent { readerTagIdentStart readerTagChar* }
+  readerTagIdentChar { readerTagIdentStart | "/" | std.digit }
+  readerTagIdent { readerTagIdentStart readerTagIdentChar* }
 
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
   identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
