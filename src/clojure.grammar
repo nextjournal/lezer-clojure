@@ -24,8 +24,8 @@ Map[coll] { "{" expression* "}" }
 VarName { Symbol }
 
 @skip {} {
-  ReaderTag { "#" ReaderTagIdent }
-  ConstructorPrefix[prefixEdge] { "#" QualifiedJavaIdent }
+  ReaderTag { "#" readerTagIdent }
+  ConstructorPrefix[prefixEdge] { "#" qualifiedJavaIdent }
 
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
@@ -95,12 +95,12 @@ Operator { !operator Symbol }
   javaIdentStart { std.asciiLetter | "_" | "$" | $[\u{a1}-\u{10ff}] }
   javaIdentPart { javaIdentStart | std.digit }
   javaIdent { javaIdentStart javaIdentPart* }
-  QualifiedJavaIdent { javaIdent ("." javaIdent)+ }
+  qualifiedJavaIdent { javaIdent ("." javaIdent)+ }
 
   // reader tags cannot contain dots
   readerTagIdentStart { std.asciiLetter | $[<>&%_=?!*+\-$\u{a1}-\u{10ff}] }
   readerTagChar { readerTagIdentStart | "/" | std.digit }
-  ReaderTagIdent { readerTagIdentStart readerTagChar* }
+  readerTagIdent { readerTagIdentStart readerTagChar* }
 
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
   identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
@@ -118,7 +118,7 @@ Operator { !operator Symbol }
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
-  @precedence { Number, QualifiedJavaIdent, ReaderTagIdent, Symbol }
+  @precedence { Number, qualifiedJavaIdent, readerTagIdent, Symbol }
 
   StringContent {
     (!["] | "\\" _)+

@@ -158,7 +158,7 @@ Program(Discard(Discard(Keyword), Symbol), String(StringContent))
 # Discarded Tagged Literal
 #_#hello/world [1] :foo
 ==>
-Program(Discard("#_", TaggedLiteral(ReaderTag("#", ReaderTagIdent) Vector("[",Number,"]"))), Keyword)
+Program(Discard("#_", TaggedLiteral(ReaderTag("#") Vector("[",Number,"]"))), Keyword)
 
 # Deref
 @hello
@@ -208,15 +208,15 @@ Program(Deref(Symbol))
 
 # Built-in Tagged Literal
 #uuid "31d20ceb-c7c2-40bb-9bd5-1e1e05f57ea1"
-==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent), String(StringContent)))
+==> Program(TaggedLiteral(ReaderTag("#"), String(StringContent)))
 
 # Reader Tag with namespace
 #my/foo [1]
-==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent),Vector("[",Number,"]")))
+==> Program(TaggedLiteral(ReaderTag("#"),Vector("[",Number,"]")))
 
 # Tagged Literal with multiple tags
 #tag/one #tag/two []
-==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent), TaggedLiteral(ReaderTag("#", ReaderTagIdent), Vector)))
+==> Program(TaggedLiteral(ReaderTag("#"), TaggedLiteral(ReaderTag("#"), Vector)))
 
 # Symbolic Value
 ##Inf, ##-Inf
@@ -280,17 +280,17 @@ sym#
 
 # Constructor Call with Vector
 #my.klass_or_type_or_record[:a :b :c]
-==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[",Keyword,Keyword,Keyword,"]")))
+==> Program(ConstructorCall(ConstructorPrefix("#"),Vector("[",Keyword,Keyword,Keyword,"]")))
 
 # Constructor Call with Vector
 #my.γωνστρυγτωρ[:a :b :c]
-==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[",Keyword,Keyword,Keyword,"]")))
+==> Program(ConstructorCall(ConstructorPrefix("#"),Vector("[",Keyword,Keyword,Keyword,"]")))
 
 # Constructor Call with Record
 #my.record{:a 1, :b 2}
-==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Map("{",Keyword,Number,Keyword,Number,"}")))
+==> Program(ConstructorCall(ConstructorPrefix("#"),Map("{",Keyword,Number,Keyword,Number,"}")))
 
 # Constructor with Reader Tags
 #read/this #my.constructor [] #read/that #my.record {}
-==> Program(TaggedLiteral(ReaderTag("#",ReaderTagIdent),ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[","]"))),
-            TaggedLiteral(ReaderTag("#",ReaderTagIdent),ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Map("{","}"))))
+==> Program(TaggedLiteral(ReaderTag("#"),ConstructorCall(ConstructorPrefix("#"),Vector("[","]"))),
+            TaggedLiteral(ReaderTag("#"),ConstructorCall(ConstructorPrefix("#"),Map("{","}"))))
