@@ -158,7 +158,7 @@ Program(Discard(Discard(Keyword), Symbol), String(StringContent))
 # Discarded Tagged Literal
 #_#hello/world [1] :foo
 ==>
-Program(Discard("#_", TaggedLiteral(ReaderTag("#", Symbol) Vector("[",Number,"]"))), Keyword)
+Program(Discard("#_", TaggedLiteral(ReaderTag("#", ReaderTagIdent) Vector("[",Number,"]"))), Keyword)
 
 # Deref
 @hello
@@ -206,13 +206,17 @@ Program(Deref(Symbol))
 #?(:cljs "hello") #?@(:cljs ["hello"])
 ==> Program(ReaderConditional("#?", List(Keyword,String(StringContent))),ReaderConditional(Deref(List(Keyword,Vector(String(StringContent))))))
 
-# Tagged Literal
+# Built-in Tagged Literal
 #uuid "31d20ceb-c7c2-40bb-9bd5-1e1e05f57ea1"
-==> Program(TaggedLiteral(ReaderTag("#", Symbol), String(StringContent)))
+==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent), String(StringContent)))
+
+# Reader Tag with namespace
+#my/foo [1]
+==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent),Vector("[",Number,"]")))
 
 # Tagged Literal with multiple tags
 #tag/one #tag/two []
-==> Program(TaggedLiteral(ReaderTag("#", Symbol), TaggedLiteral(ReaderTag("#", Symbol), Vector)))
+==> Program(TaggedLiteral(ReaderTag("#", ReaderTagIdent), TaggedLiteral(ReaderTag("#", ReaderTagIdent), Vector)))
 
 # Symbolic Value
 ##Inf, ##-Inf
@@ -274,18 +278,19 @@ sym#
 /
 ==> Program(Symbol)
 
-# Constructor
-#my.foo [1]
-==> Program(ConstructorCall(ConstructorPrefix("#", DottedIdent),Vector("[",Number,"]")))
+# Constructor Call with Vector
+#my.klass_or_type_or_record[:a :b :c]
+==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[",Keyword,Keyword,Keyword,"]")))
 
-# A Symbol with dots in namespace
-my.ns/foo
-==> Program(Symbol)
+# Constructor Call with Vector
+#my.γωνστρυγτωρ[:a :b :c]
+==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[",Keyword,Keyword,Keyword,"]")))
 
-# Reader Tag with namespace
-#my/foo [1]
-==> Program(TaggedLiteral(ReaderTag("#", Symbol),Vector("[",Number,"]")))
+# Constructor Call with Record
+#my.record{:a 1, :b 2}
+==> Program(ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Map("{",Keyword,Number,Keyword,Number,"}")))
 
-# Reader Tag with dotted namespace
-#my.ns/foo [1]
-==> Program(TaggedLiteral(ReaderTag("#", Symbol),Vector("[",Number,"]")))
+# Constructor with Reader Tags
+#read/this #my.constructor [] #read/that #my.record {}
+==> Program(TaggedLiteral(ReaderTag("#",ReaderTagIdent),ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Vector("[","]"))),
+            TaggedLiteral(ReaderTag("#",ReaderTagIdent),ConstructorCall(ConstructorPrefix("#",QualifiedJavaIdent),Map("{","}"))))

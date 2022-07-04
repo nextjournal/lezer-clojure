@@ -24,8 +24,8 @@ Map[coll] { "{" expression* "}" }
 VarName { Symbol }
 
 @skip {} {
-  ReaderTag { "#" Symbol }
-  ConstructorPrefix { "#" DottedIdent }
+  ReaderTag { "#" ReaderTagIdent }
+  ConstructorPrefix { "#" QualifiedJavaIdent }
 
   SymbolicValue { "##" ident }
   Set[prefixColl] { "#" Map }
@@ -44,6 +44,8 @@ VarName { Symbol }
 
 Meta[prefixContainer]<t> { (Metadata | ReaderMetadata) !meta t }
 TaggedLiteral[prefixContainer]<t> { ReaderTag t }
+
+// https://clojure.org/reference/reader#_deftype_defrecord_and_constructor_calls_version_1_3_and_later
 ConstructorCall[prefixContainer] { ConstructorPrefix (Map | Vector) }
 
 Deref[prefixColl] { "@" expression }
@@ -88,8 +90,17 @@ Operator { !operator Symbol }
 
   LineComment { ";" ![\n]* }
 
-  fragment { std.asciiLetter+ } // TBD
-  DottedIdent { fragment ("." fragment)+ }
+  // https://docs.oracle.com/javase/specs/jls/se7/html/jls-3.html#jls-3.8
+  // class or constructor names
+  javaIdentStart { std.asciiLetter | "_" | "$" | $[\u{a1}-\u{10ff}] }
+  javaIdentPart { javaIdentStart | std.digit }
+  javaIdent { javaIdentStart javaIdentPart* }
+  QualifiedJavaIdent { javaIdent ("." javaIdent)+ }
+
+  // reader tags cannot contain dots
+  readerTagIdentStart { std.asciiLetter | $[<>&%_=?!*+\-$\u{a1}-\u{10ff}] }
+  readerTagChar { readerTagIdentStart | "/" | std.digit }
+  ReaderTagIdent { readerTagIdentStart readerTagChar* }
 
   identStart { std.asciiLetter | $[<>&%._=?!*+\-$\u{a1}-\u{10ff}/] }
   identChar { identStart | std.digit | ":" | "'" | "#" | "/"}
@@ -107,7 +118,7 @@ Operator { !operator Symbol }
     "0b" $[01]+ |
     "0o" $[0-7]+
   }
-  @precedence { Number, DottedIdent, Symbol }
+  @precedence { Number, QualifiedJavaIdent, ReaderTagIdent, Symbol }
 
   StringContent {
     (!["] | "\\" _)+
