@@ -2,3 +2,5 @@
 /src/parser.*
 .tern-*
 /dist
+.idea
+debug
