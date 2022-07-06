@@ -1,3 +1,6 @@
+# Unreleased
+* Add namespace forms
+
 ## 1.0.0-rc.1 (2022-07-05)
 * Reintroduce constructor call Syntax
 * Refine allowed Reader Tags
