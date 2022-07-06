@@ -294,3 +294,34 @@ sym#
 #read/this #my.constructor [] #read/that #my.record {}
 ==> Program(TaggedLiteral(ReaderTag("#"),ConstructorCall(ConstructorPrefix("#"),Vector("[","]"))),
             TaggedLiteral(ReaderTag("#"),ConstructorCall(ConstructorPrefix("#"),Map("{","}"))))
+
+# Namespace Form
+(ns some.ns.name
+  "This is a docstring"
+  (:require [foo.bar]
+            [ban.dan]))
+==> Program(List(NS,VarName(Symbol),DocString(String(StringContent)),List(Keyword,Vector(Symbol),Vector(Symbol))))
+
+
+# Namespace Form with Meta
+(ns ^:reload some.ns.name
+  "This is a docstring"
+  (:require [foo.bar]
+            [ban.dan]))
+==> Program(List(NS,Meta(Metadata(Keyword), VarName(Symbol)),DocString(String(StringContent)),List(Keyword,Vector(Symbol),Vector(Symbol))))
+
+
+# Namespace with just a docstring
+(ns simple.ns "docstring")
+
+==> Program(List(NS, VarName(Symbol), DocString(String(StringContent))))
+
+# Namespace simplest form
+(ns very.simple)
+==> Program(List(NS, VarName(Symbol)))
+
+# Namespace with attributes
+(ns cljdocs.example.core
+  "This is a doc string, FYI :D"
+  {:author "John Doe"})
+==> Program(List(NS, VarName(Symbol), DocString(String(StringContent)), Map(Keyword, String(StringContent))))
