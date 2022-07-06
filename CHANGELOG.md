@@ -1,4 +1,6 @@
-# Unreleased
+# Changelog
+
+## 1.0.0-rc.2 (2022-07-06)
 * Add namespace forms
 
 ## 1.0.0-rc.1 (2022-07-05)
