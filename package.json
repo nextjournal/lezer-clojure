@@ -1,10 +1,10 @@
 {
-  "name": "lezer-clojure",
-  "version": "1.0.0-rc.2",
+  "name": "@nextjournal/lezer-clojure",
+  "version": "1.0.0",
   "description": "lezer-based Clojure(Script) grammar",
   "main": "dist/index.cjs",
   "author": "Martin Kavalar <martin@nextjournal.com>",
-  "license": "MIT",
+  "license": "ISC",
   "type": "module",
   "exports": {
     "import": "./dist/index.es.js",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/nextjournal/lezer-clojure.git"
+    "url": "git+https://github.com/nextjournal/lezer-clojure.git"
   },
   "scripts": {
     "build": "lezer-generator src/clojure.grammar -o src/parser && rollup -c",
@@ -32,5 +32,16 @@
     "test": "mocha --experimental-modules test/test-*.js",
     "on-change": "npm run build && npm run test",
     "watch": "git ls-files | entr npm run on-change"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/nextjournal/lezer-clojure/issues"
+  },
+  "homepage": "https://github.com/nextjournal/lezer-clojure#readme",
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "lezer",
+    "clojure"
+  ]
 }
