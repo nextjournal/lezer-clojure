@@ -123,7 +123,7 @@ Operator { !operator Symbol }
   @precedence { Number, qualifiedJavaIdent, readerTagIdent, Symbol }
 
   StringContent {
-    (!["] | "\\" _)+
+    (![\\"] | "\\" _)+
   }
 
   unicodeChar { "u" $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F] $[0-9a-fA-F]}
